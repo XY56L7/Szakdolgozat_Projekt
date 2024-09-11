@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import get_energy_data
-from .views import register, login
+from .views import get_energy_data ,register, login,get_users
 
 urlpatterns = [
     # path('users/',get_users,name='get_users'),
@@ -9,4 +8,5 @@ urlpatterns = [
     path('users/energy/', get_energy_data ,name='get_energy_data'),
     path('register/', register, name='register'),
     path('login/', login, name='login'),
+    path('users/', get_users, name='get_users'),
 ]

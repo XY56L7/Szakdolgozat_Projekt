@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 interface TokenResponse {
@@ -14,12 +14,11 @@ interface TokenResponse {
 })
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api/';
-  private authSubject = new BehaviorSubject<TokenResponse | null>(null);
+  public authSubject = new BehaviorSubject<TokenResponse | null>(null);
 
   constructor(private http: HttpClient, private router: Router) { }
 
   register(user: any): Observable<any> {
-    console.log()
     return this.http.post(`${this.apiUrl}register/`, user);
   }
 
@@ -28,6 +27,7 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('access', response.access);
         localStorage.setItem('refresh', response.refresh);
+        console.log("Line 41 auth service ts")
         this.authSubject.next(response);
       })
     );

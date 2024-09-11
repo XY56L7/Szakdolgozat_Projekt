@@ -1,7 +1,8 @@
 <div class="navbar" id="navbar">
     <ul>
-        <li><a [routerLink]="['/register']" id="registerLink"> Register</a></li>
-        <li><a [routerLink]="['/login']" id="loginLink"> Login</a></li>
+        <p>{{isAuthenticated}}</p>
+        <li *ngIf="!isAuthenticated"><a [routerLink]="['/register']" id="registerLink"> Register</a></li>
+        <li *ngIf="!isAuthenticated"><a [routerLink]="['/login']" id="loginLink"> Login</a></li>
         <li><a href="#household" id="householdeLink"><img src="{{ '/assets/images/home.png' }}"> Household</a></li>
         <li><a href="#evaluation" id="evaluationLink"><img src="{{ '/assets/images/axis.png' }}"> Evaluation</a></li>
         <li><a href="#battery" id="batteryLink"><img src="{{ '/assets/images/charging.png' }}"> Battery management</a></li>
