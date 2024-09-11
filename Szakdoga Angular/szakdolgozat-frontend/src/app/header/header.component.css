@@ -1,0 +1,56 @@
+/* Navbar stílusok */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%; /* Vertical extent */
+    width: 200px; /* Fixed width */
+    background-color: #f8f8f8; /* Light background color */
+    padding-top: 20px; /* Space at the top */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    overflow: hidden; /* Hide overflow */
+    border-radius: 10px; /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition */
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar ul li {
+    margin-bottom: 20px; /* Space between items */
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #333; /* Default text color */
+    display: flex;
+    align-items: center; /* Align items vertically */
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px; /* Rounded corners */
+    transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition */
+}
+
+.navbar ul li a img {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.navbar ul li a.selected {
+    background-color: #e0e0e0; /* Highlight for selected item */
+    font-weight: bold;
+}
+
+.navbar ul li a:hover {
+    background-color: #333; /* Dark background on hover */
+    color: white; /* White text on hover */
+}
+
+img {
+    width: 19px; /* Icon width */
+}

@@ -1,0 +1,144 @@
+<!-- <div class="content">
+        <h2>Energy Consumption Analysis</h2>
+
+        <form method="post" action="" enctype="multipart/form-data"> 
+            <label for="device_option">Select the device:</label>
+            <select name="device_option" id="device_option">
+                <option value="all">All devices</option>
+                <option value="specific">Select specific devices</option>
+            </select>
+            <br>
+            <table id="deviceTable" style="display: none;">
+                <div id="specific_devices" style="display: none;">
+                    <label for="devices">Select the devices:</label>
+                        <tr>
+                            <td><input type="checkbox" name="devices" value="hair_dryer" id="hair_dryer"> <label for="hair_dryer">Hair Dryer</label></td>
+                            <td><input type="checkbox" name="devices" value="toaster" id="toaster"> <label for="toaster">Toaster</label></td>
+                            <td><input type="checkbox" name="devices" value="aggregate" id="aggregate"> <label for="aggregate">Aggregate</label></td>
+                            <td><input type="checkbox" name="devices" value="boiler" id="boiler"> <label for="boiler">Boiler</label></td>
+                            <td><input type="checkbox" name="devices" value="fridge" id="fridge"> <label for="fridge">Fridge</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="devices" value="vacuum_cleaner" id="vacuum_cleaner"> <label for="vacuum_cleaner">Vacuum Cleaner</label></td>
+                            <td><input type="checkbox" name="devices" value="microwave" id="microwave"> <label for="microwave">Microwave</label></td>
+                            <td><input type="checkbox" name="devices" value="pc_desktop" id="pc_desktop"> <label for="pc_desktop">PC Desktop</label></td>
+                            <td><input type="checkbox" name="devices" value="partial_1_aggregate" id="partial_1_aggregate"> <label for="partial_1_aggregate">Partial 1 Aggregate</label></td>
+                            <td><input type="checkbox" name="devices" value="partial_2_aggregate" id="partial_2_aggregate"> <label for="partial_2_aggregate">Partial 2 Aggregate</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="devices" value="partial_3_aggregate" id="partial_3_aggregate"> <label for="partial_3_aggregate">Partial 3 Aggregate</label></td>
+                            <td><input type="checkbox" name="devices" value="printer" id="printer"> <label for="printer">Printer</label></td>
+                            <td><input type="checkbox" name="devices" value="washing_machine" id="washing_machine"> <label for="washing_machine">Washing Machine</label></td>
+                        </tr>
+                </div>
+            </table>  
+            <br>
+            <label for="time_interval">Select the time interval:</label>
+            <select name="time_interval" id="time_interval">
+                <option value="daily">Daily</option>
+                <option value="hourly">Hourly</option>
+                <option value="5_hourly">Every 5 Hours</option>
+            </select>
+            <br>
+            <label for="prediction_model">Select the prediction model:</label>
+            <select name="prediction_model" id="prediction_model">
+                <option value="LSTM">Built-in LSTM</option>
+                <option value="custom">Upload Custom Model</option>
+            </select>
+            <br>
+            <input type="file" id="custom_model_file" name="custom_model_file" accept=".h5, .hdf5" style="display: none;"> 
+            <br>
+            <label for="V_rms">Effektív feszültség (V_rms):</label>
+            <input type="text" id="V_rms" name="V_rms" required>
+            
+            <label for="I_rms">Effektív áram (I_rms):</label>
+            <input type="text" id="I_rms" name="I_rms" required>
+            
+            <label for="P">Active Power (P):</label>
+            <input type="text" id="P" name="P" required>
+            
+            <label for="S">Apparent Power (S):</label>
+            <input type="text" id="S" name="S" required>
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+            
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <input type="submit" value="Start Analysis">
+        </form>
+</div>  -->
+
+
+<div class="content">
+    <h2>Energy Consumption Analysis</h2>
+  
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  
+      <label for="device_option">Select the device:</label>
+      <select name="device_option" ngModel>
+        <option value="all">All devices</option>
+        <option value="specific">Select specific devices</option>
+      </select>
+      <br>
+  
+      <div *ngIf="form.value.device_option === 'specific'">
+        <table>
+          <tr>
+            <td>
+              <input type="checkbox" (change)="onDeviceSelectionChange($event, 'hair_dryer')" id="hair_dryer">
+              <label for="hair_dryer">Hair Dryer</label>
+            </td>
+            <td>
+              <input type="checkbox" (change)="onDeviceSelectionChange($event, 'toaster')" id="toaster">
+              <label for="toaster">Toaster</label>
+            </td>
+            <!-- Add the other devices similarly -->
+          </tr>
+        </table>
+      </div>
+      
+      <br>
+      <label for="time_interval">Select the time interval:</label>
+      <select name="time_interval" ngModel>
+        <option value="daily">Daily</option>
+        <option value="hourly">Hourly</option>
+        <option value="5_hourly">Every 5 Hours</option>
+      </select>
+      <br>
+  
+      <label for="prediction_model">Select the prediction model:</label>
+      <select name="prediction_model" ngModel>
+        <option value="LSTM">Built-in LSTM</option>
+        <option value="custom">Upload Custom Model</option>
+      </select>
+      <br>
+  
+      <input type="file" (change)="onFileSelected($event)" accept=".h5, .hdf5" *ngIf="form.value.prediction_model === 'custom'">
+      <br>
+  
+      <label for="V_rms">Effektív feszültség (V_rms):</label>
+      <input type="text" name="V_rms" ngModel required>
+      
+      <label for="I_rms">Effektív áram (I_rms):</label>
+      <input type="text" name="I_rms" ngModel required>
+  
+      <label for="P">Active Power (P):</label>
+      <input type="text" name="P" ngModel required>
+  
+      <label for="S">Apparent Power (S):</label>
+      <input type="text" name="S" ngModel required>
+  
+      <label for="start_date">Start Date:</label>
+      <input type="date" name="start_date" ngModel required>
+      
+      <label for="end_date">End Date:</label>
+      <input type="date" name="end_date" ngModel required>
+  
+      <button type="submit">Start Analysis</button>
+    </form>
+
+    <button (click)="onSubmitForTesting()">Testing</button>
+
+  </div>
+  
