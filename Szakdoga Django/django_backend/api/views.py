@@ -1,9 +1,178 @@
+import os
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializer import EnergyAnalysisSerializer, RegisterSerializer, UserSerializer
 from django.contrib.auth.models import User
+
+# your_app/views.py
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import numpy as np
+import pandas as pd
+import json
+from keras.models import load_model
+from sklearn.preprocessing import MinMaxScaler
+import joblib
+import matplotlib.pyplot as plt
+import io
+import base64
+import json
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import random
+
+
+IMAGE_DIR = r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Angular\szakdolgozat-frontend\src\assets\images'
+model = load_model(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine.keras')
+scaler = joblib.load(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine_scaler.pkl')
+# Define your prediction function
+def predict_power_consumption(v_rms, i_rms, s, p):
+
+    # Load the model
+    model = load_model(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine.keras')
+
+    # Initialize scaler
+# Prepare the input data
+    input_data = np.array([[v_rms, i_rms, s, p]])
+    input_data_scaled = scaler.transform(input_data)
+    input_data_scaled = np.reshape(input_data_scaled, (1, 1, 4))  # 1 time step, 4 features
+    
+    # Make prediction
+    prediction = model.predict(input_data_scaled)
+    predicted_power = float(prediction[0, 3])
+
+    return predicted_power
+# Define your view function
+import logging
+logger = logging.getLogger(__name__)
+@csrf_exempt
+@require_http_methods(["POST"])
+def evaluate_model(request):
+    try:
+        # Get variables from request
+        data = json.loads(request.body)
+
+        v_rms = float(data.get('V_rms'))
+        i_rms = float(data.get('I_rms'))
+        s = float(data.get('S'))
+        p = float(data.get('P'))
+
+        # Predict power consumption
+        predicted_power = predict_power_consumption(v_rms, i_rms, s, p)
+
+        # Create a plot
+        fig, ax = plt.subplots()
+        ax.plot([v_rms, i_rms, s, p], label='Input Data')
+        ax.set_title('Predicted Power Consumption')
+        ax.set_xlabel('Features')
+        ax.set_ylabel('Value')
+        ax.legend()
+
+# Define the path to save the image
+        random_number = random.randint(0,10000)
+        image_filename = f'prediction_plot{random_number}.png'
+        image_path = os.path.join(IMAGE_DIR, image_filename)
+
+        # Save the plot as a PNG file
+        plt.savefig(image_path)
+        plt.close(fig)  # Close the plot to free memory
+
+        import time
+
+        time.sleep(5)  # Delay execution by 2 seconds
+
+        # Return the image path and prediction as JSON
+        response_data = {
+            'image_path': random_number,
+            'predicted_power': predicted_power
+        }
+        return JsonResponse(response_data)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+# @csrf_exempt
+# @require_http_methods(["POST"])
+# def evaluate_model(request):
+#     try:
+#         # Get variables from request
+#         data = json.loads(request.body)
+        
+#         logger.info(f"Received data: {data}")
+
+#         v_rms = float(data.get('V_rms'))
+#         i_rms = float(data.get('I_rms'))
+#         s = float(data.get('S'))
+#         p = float(data.get('P'))
+
+#         # Predict power consumption
+#         predicted_power = predict_power_consumption(v_rms, i_rms, s, p)
+
+#         # Return prediction as JSON
+#         response_data = {
+#             'predicted_power': predicted_power
+#         }
+
+#         print(response_data)
+#         return JsonResponse(response_data)
+
+#     except Exception as e:
+#         logger.error(f"Error: {str(e)}")
+#         return JsonResponse({'error': str(e)}, status=400)
+
+
+
+# @csrf_exempt
+# @require_http_methods(["POST"])
+# def predict_and_plot(request):
+#     data = json.loads(request.body)
+    
+#     v_rms = data.get('V_rms')
+#     i_rms = data.get('I_rms')
+#     s = data.get('S')
+#     p = data.get('P')
+    
+#     # Bemeneti adatok előkészítése
+
+#     model = load_model('api\models\washing_machine.keras')
+#     scaler = MinMaxScaler(feature_range=(0, 1))
+
+#     input_data = np.array([[v_rms, i_rms, s, p]])
+#     input_data_scaled = scaler.transform(input_data)
+#     input_data_scaled = np.reshape(input_data_scaled, (1, 1, 4))
+    
+#     # Előrejelzés
+#     prediction = model.predict(input_data_scaled)
+#     predicted_p = prediction[0, 3]
+    
+#     # Grafikon generálása
+#     import matplotlib.pyplot as plt
+#     from io import BytesIO
+#     import base64
+
+#     # Készítünk egy példaként grafikont
+#     plt.figure(figsize=(10, 5))
+#     plt.plot([v_rms, i_rms, s, p], label='Input Features')
+#     plt.title('Example Plot')
+#     plt.xlabel('Features')
+#     plt.ylabel('Values')
+#     plt.legend()
+    
+#     # Mentjük a grafikont egy bufferbe
+#     buf = BytesIO()
+#     plt.savefig(buf, format='png')
+#     buf.seek(0)
+#     image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+    
+#     response_data = {
+#         'predicted_P': predicted_p,
+#         'plot': image_base64
+#     }
+    
+#     return JsonResponse(response_data)
 
 @api_view(['GET'])
 def get_users(request):

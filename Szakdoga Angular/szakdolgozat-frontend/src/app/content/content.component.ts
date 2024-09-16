@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EnergyAnalysisService } from '../services/energy-analysis.service';
+import { PredictionData } from '../models/energy_model';
 
 @Component({
   selector: 'app-content',
@@ -11,10 +12,34 @@ import { EnergyAnalysisService } from '../services/energy-analysis.service';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent {
+  formData: PredictionData = { v_rms: 0, i_rms: 0, s: 0, p: 0 }; // Using the model
+  predictedP: number | undefined;
+  plotUrl: string | undefined;
   selectedDevices: string[] = [];
   customModelFile: File | null = null;
 
   constructor(private energyAnalysisService: EnergyAnalysisService) {}
+
+  // Hívjuk az API-t a formData objektummal
+  predict() {
+    const newPredictionData: PredictionData = {
+      v_rms: this.formData.v_rms,
+      i_rms: this.formData.i_rms,
+      s: this.formData.s,
+      p: this.formData.p,
+    };
+    const BASE_IMAGE_PATH = 'assets/images/';
+    this.energyAnalysisService.getPrediction(newPredictionData).subscribe(response => {
+      console.log(response)
+      console.log("PPP",this.predictedP)
+      console.log(response.image_path)
+      this.predictedP = response.predicted_power;
+      //this.plotUrl = `assets/images/${response.image_path}`;
+      this.plotUrl = `${BASE_IMAGE_PATH}prediction_plot${response.image_path}.png`;
+      this.plotUrl = this.plotUrl.trim();
+      console.log(this.plotUrl)
+    });
+  }
 
   onFileSelected(event: any): void {
     this.customModelFile = event.target.files[0];

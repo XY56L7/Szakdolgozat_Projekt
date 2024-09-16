@@ -2,15 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EnergyAnalysis } from '../models/energy_analysis';
+import { PredictionData } from '../models/energy_model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnergyAnalysisService {
 
-  private apiUrl = 'https://example.com/api/energy-analysis';  // A szerver URL-je
+  private apiUrl = 'http://127.0.0.1:8000/api/users/energy/';  // A szerver URL-je
 
   constructor(private http: HttpClient) { }
+
+  getPrediction(object : PredictionData) {
+    const body = { V_rms: object.v_rms, I_rms: object.i_rms, S: object.s, P: object.p };
+    return this.http.post<any>('http://127.0.0.1:8000/api/predict/', body);
+  }
 
   submitButtonForTesting(): Observable<EnergyAnalysis>{
     return this.http.get<any>('http://127.0.0.1:8000/api/users/energy/');

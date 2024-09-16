@@ -1,6 +1,6 @@
 <div class="navbar" id="navbar">
     <ul>
-        <p>{{isAuthenticated}}</p>
+        <h1>Be vagy jelentkezve : {{isAuthenticated}}</h1>
         <li *ngIf="!isAuthenticated"><a [routerLink]="['/register']" id="registerLink"> Register</a></li>
         <li *ngIf="!isAuthenticated"><a [routerLink]="['/login']" id="loginLink"> Login</a></li>
         <li><a href="#household" id="householdeLink"><img src="{{ '/assets/images/home.png' }}"> Household</a></li>

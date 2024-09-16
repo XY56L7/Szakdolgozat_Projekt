@@ -69,7 +69,7 @@
         </form>
 </div>  -->
 
-
+<!-- 
 <div class="content">
     <h2>Energy Consumption Analysis</h2>
   
@@ -93,7 +93,6 @@
               <input type="checkbox" (change)="onDeviceSelectionChange($event, 'toaster')" id="toaster">
               <label for="toaster">Toaster</label>
             </td>
-            <!-- Add the other devices similarly -->
           </tr>
         </table>
       </div>
@@ -141,4 +140,29 @@
     <button (click)="onSubmitForTesting()">Testing</button>
 
   </div>
+   -->
+
+   <div class="content">
+    <label for="V_rms">Effektív feszültség (V_rms):</label>
+    <input [(ngModel)]="formData.v_rms" placeholder="V_rms" type="number">
+
+    <label for="I_rms">Effektív áram (I_rms):</label>
+    <input [(ngModel)]="formData.i_rms" placeholder="I_rms" type="number">
+
+    <label for="S">Active Power (P):</label>
+    <input [(ngModel)]="formData.s" placeholder="S" type="number">
+
+    <label for="P">Apparent Power (S):</label>
+    <input [(ngModel)]="formData.p" placeholder="P" type="number">
+
+    <button (click)="predict()">Predict</button>
+  
+    <h1>{{predictedP !== undefined}}</h1>
+
+    <div *ngIf="predictedP !== undefined">
+      <h3>Predicted P: {{ predictedP }}</h3>
+      <img *ngIf="plotUrl" [src]="plotUrl" alt="Prediction Plot">
+    </div>
+  </div>
+
   
