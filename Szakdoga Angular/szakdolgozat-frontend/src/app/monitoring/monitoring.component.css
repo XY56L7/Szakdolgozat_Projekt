@@ -1,0 +1,33 @@
+/* Center the image and button */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .image {
+    width: 950px;
+    height: 700px;
+  }
+  
+  /* Styling for the circular button */
+  .circle-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: black;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  .circle-btn:hover {
+    background-color: #17651c;
+  }
+  

@@ -69,12 +69,13 @@
         </form>
 </div>  -->
 
-<!-- 
+
 <div class="content">
     <h2>Energy Consumption Analysis</h2>
   
-    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
-  
+    <!-- <form (ngSubmit)="onSubmit(form)" #form="ngForm"> -->
+      <form #form="ngForm">
+
       <label for="device_option">Select the device:</label>
       <select name="device_option" ngModel>
         <option value="all">All devices</option>
@@ -116,7 +117,7 @@
       <input type="file" (change)="onFileSelected($event)" accept=".h5, .hdf5" *ngIf="form.value.prediction_model === 'custom'">
       <br>
   
-      <label for="V_rms">Effektív feszültség (V_rms):</label>
+      <!-- <label for="V_rms">Effektív feszültség (V_rms):</label>
       <input type="text" name="V_rms" ngModel required>
       
       <label for="I_rms">Effektív áram (I_rms):</label>
@@ -126,23 +127,34 @@
       <input type="text" name="P" ngModel required>
   
       <label for="S">Apparent Power (S):</label>
-      <input type="text" name="S" ngModel required>
-  
+      <input type="text" name="S" ngModel required> -->
+
+      <label for="V_rms">Effektív feszültség (V_rms):</label>
+      <input [(ngModel)]="formData.v_rms" name="v_rms" placeholder="V_rms" type="number">
+
+      <label for="I_rms">Effektív áram (I_rms):</label>
+      <input [(ngModel)]="formData.i_rms" name="i_rms" placeholder="I_rms" type="number">
+
+      <label for="S">Active Power (P):</label>
+      <input [(ngModel)]="formData.s" name="s" placeholder="S" type="number">
+
+      <label for="P">Apparent Power (S):</label>
+      <input [(ngModel)]="formData.p" name="p" placeholder="P" type="number">
+
       <label for="start_date">Start Date:</label>
       <input type="date" name="start_date" ngModel required>
       
       <label for="end_date">End Date:</label>
       <input type="date" name="end_date" ngModel required>
   
-      <button type="submit">Start Analysis</button>
+      <button (click)="predict()" type="submit">Start Analysis</button>
     </form>
 
-    <button (click)="onSubmitForTesting()">Testing</button>
 
   </div>
-   -->
+  
 
-   <div class="content">
+   <!-- <div class="content">
     <label for="V_rms">Effektív feszültség (V_rms):</label>
     <input [(ngModel)]="formData.v_rms" placeholder="V_rms" type="number">
 
@@ -163,6 +175,6 @@
       <h3>Predicted P: {{ predictedP }}</h3>
       <img *ngIf="plotUrl" [src]="plotUrl" alt="Prediction Plot">
     </div>
-  </div>
+  </div> -->
 
   

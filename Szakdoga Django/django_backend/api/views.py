@@ -79,7 +79,7 @@ def evaluate_model(request):
 
         # Save the plot as a PNG file
         plt.savefig(image_path)
-        plt.close(fig)  # Close the plot to free memory
+        #plt.close(fig)  # Close the plot to free memory
 
         import time
 

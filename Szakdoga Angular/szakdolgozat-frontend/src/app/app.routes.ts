@@ -4,6 +4,8 @@ import { ContentComponent } from './content/content.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { MonitoringComponent } from './monitoring/monitoring.component';
+import { EvaluateComponent } from './evaluate/evaluate.component';
 
 
 export const routes: Routes = [
@@ -11,6 +13,8 @@ export const routes: Routes = [
   { path: 'home', component: ContentComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'monitoring', component: MonitoringComponent },
+  { path: 'evaluate', component: EvaluateComponent },
 ];
 
 @NgModule({
