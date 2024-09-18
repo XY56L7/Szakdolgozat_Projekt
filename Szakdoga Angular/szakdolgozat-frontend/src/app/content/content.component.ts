@@ -29,30 +29,20 @@ export class ContentComponent {
       s: this.formData.s,
       p: this.formData.p,
     };
-    const BASE_IMAGE_PATH = 'assets/images/';
     this.energyAnalysisService.getPrediction(newPredictionData).subscribe(response => {
-      console.log(response)
-      console.log("PPP",this.predictedP)
-      console.log(response.image_path)
       this.predictedP = response.predicted_power;
-      this.plotUrl = 'assets/images/prediction_plot35.png';
-      console.log(this.plotUrl)
-      console.log('Amit kiír')
-      this.plotUrl = `${BASE_IMAGE_PATH}prediction_plot${35}.png`;
-      this.plotUrl = this.plotUrl.trim();
-      console.log(this.plotUrl)
-      console.log('Amit nem')
+      this.plotUrl = 'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\media\prediction_plot4918.png'; // Dinamikusan beállítjuk az elérési utat
+
       if (response.image_path) {
-        this.plotUrl = `assets/images/prediction_plot${response.image_path}.png`; // Dinamikusan beállítjuk az elérési utat
         console.log('Image URL:', this.plotUrl);
+        this.plotUrl=response.image_path;
       }
             // Navigate to the evaluate route and pass the prediction data
             this.router.navigate(['/evaluate'], {
-              state: { 
-                predictedP: this.predictedP, 
-                plotUrl: this.plotUrl 
-              }
+              state: { predictedP: this.predictedP, plotUrl: this.plotUrl }
             });
+            // localStorage.setItem('predictedP', JSON.stringify(this.predictedP));
+            // localStorage.setItem('plotUrl', this.plotUrl);
     });
   }
 

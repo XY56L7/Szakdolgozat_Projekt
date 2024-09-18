@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 interface TokenResponse {
   access: string;
   refresh: string;
+  userName:string;
 }
 
 @Injectable({
@@ -15,6 +16,7 @@ interface TokenResponse {
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api/';
   public authSubject = new BehaviorSubject<TokenResponse | null>(null);
+  public authUserNameSubject = new BehaviorSubject<TokenResponse | null>(null);
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -29,6 +31,7 @@ export class AuthService {
         localStorage.setItem('refresh', response.refresh);
         console.log("Line 41 auth service ts")
         this.authSubject.next(response);
+        this.authUserNameSubject.next(response);
       })
     );
   }

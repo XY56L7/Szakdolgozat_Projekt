@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -27,6 +28,7 @@ import random
 
 
 IMAGE_DIR = r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Angular\szakdolgozat-frontend\src\assets\images'
+IMAGE_DIR_2 = r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Angular\szakdolgozat-frontend\dist\angular-tour-of-heroes\browser\assets\images'
 model = load_model(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine.keras')
 scaler = joblib.load(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine_scaler.pkl')
 # Define your prediction function
@@ -47,8 +49,9 @@ def predict_power_consumption(v_rms, i_rms, s, p):
 
     return predicted_power
 # Define your view function
-import logging
-logger = logging.getLogger(__name__)
+
+MEDIA_DIR = r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\media'
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def evaluate_model(request):
@@ -72,22 +75,19 @@ def evaluate_model(request):
         ax.set_ylabel('Value')
         ax.legend()
 
-# Define the path to save the image
-        random_number = random.randint(0,10000)
+        # Define the path to save the image
+        random_number = random.randint(0, 10000)
         image_filename = f'prediction_plot{random_number}.png'
-        image_path = os.path.join(IMAGE_DIR, image_filename)
+        image_path = os.path.join(MEDIA_DIR, image_filename)
+        print(f"Saving file at: {image_path}")
 
         # Save the plot as a PNG file
         plt.savefig(image_path)
-        #plt.close(fig)  # Close the plot to free memory
-
-        import time
-
-        time.sleep(5)  # Delay execution by 2 seconds
+        plt.close(fig)  # Close the plot to free memory
 
         # Return the image path and prediction as JSON
         response_data = {
-            'image_path': random_number,
+            'image_path': request.build_absolute_uri(settings.MEDIA_URL + image_filename),  # Send the full image path in the response
             'predicted_power': predicted_power
         }
         return JsonResponse(response_data)
@@ -204,6 +204,7 @@ def login(request):
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
+            'userName': username
         })
     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 

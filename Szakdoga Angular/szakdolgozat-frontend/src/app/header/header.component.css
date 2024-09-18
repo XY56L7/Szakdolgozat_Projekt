@@ -1,4 +1,4 @@
-/* Navbar stílusok */
+/* Navbar styles */
 .navbar {
     position: fixed;
     top: 0;
@@ -26,7 +26,8 @@
     margin-bottom: 20px; /* Space between items */
 }
 
-.navbar ul li a {
+.navbar ul li a,
+.navbar ul li button {
     text-decoration: none;
     color: #333; /* Default text color */
     display: flex;
@@ -35,18 +36,24 @@
     font-size: 16px;
     border-radius: 10px; /* Rounded corners */
     transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition */
+    border: none; /* Remove button border */
+    background: none; /* Remove default button background */
+    cursor: pointer; /* Pointer cursor on hover */
 }
 
-.navbar ul li a img {
+.navbar ul li a img,
+.navbar ul li button img {
     margin-right: 10px; /* Space between icon and text */
 }
 
-.navbar ul li a.selected {
+.navbar ul li a.selected,
+.navbar ul li button.selected {
     background-color: #e0e0e0; /* Highlight for selected item */
     font-weight: bold;
 }
 
-.navbar ul li a:hover {
+.navbar ul li a:hover,
+.navbar ul li button:hover {
     background-color: #333; /* Dark background on hover */
     color: white; /* White text on hover */
 }
