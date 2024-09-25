@@ -1,3 +1,47 @@
-.content{
+.content {
     padding-left: 250px;
-}
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: bold;
+  }
+  
+  .custom-input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .custom-input:focus {
+    border-color: #6200ea;
+    outline: none;
+  }
+  
+  .submit-button {
+    display: block;
+    width: 82%;
+    padding: 10px;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .submit-button:hover {
+    background-color: #3700b3;
+  }
+  

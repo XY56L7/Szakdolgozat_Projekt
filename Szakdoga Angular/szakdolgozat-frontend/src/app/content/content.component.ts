@@ -34,8 +34,9 @@ export class ContentComponent {
       this.plotUrl = 'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\media\prediction_plot4918.png'; // Dinamikusan beállítjuk az elérési utat
 
       if (response.image_path) {
-        console.log('Image URL:', this.plotUrl);
         this.plotUrl=response.image_path;
+        console.log('Image URL:', this.plotUrl);
+
       }
             // Navigate to the evaluate route and pass the prediction data
             this.router.navigate(['/evaluate'], {

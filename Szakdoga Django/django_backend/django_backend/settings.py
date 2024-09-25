@@ -23,7 +23,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-MEDIA_URL = '/api/media/'  # Ezen keresztül érheted el a fájlokat URL-en
+MEDIA_URL = '/media/'  # Ezen keresztül érheted el a fájlokat URL-en
 MEDIA_ROOT = os.path.join(BASE_DIR, 'api', 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

@@ -1,15 +1,37 @@
-
 <div class="content">
+  <div class="register-container">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <label for="username">Username:</label>
-    <input id="username" formControlName="username" type="text">
-    
-    <label for="email">Email:</label>
-    <input id="email" formControlName="email" type="email">
-    
-    <label for="password">Password:</label>
-    <input id="password" formControlName="password" type="password">
-    
-    <button type="submit">Register</button>
-  </form>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input id="username" formControlName="username" type="text" class="custom-input">
+        <mat-error *ngIf="hasError('username', 'required')" class="error-message">
+          Username is required
+        </mat-error>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email" class="custom-input">
+        <mat-error *ngIf="hasError('email', 'required')" class="error-message">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="hasError('email', 'email')" class="error-message">
+          Invalid email format
+        </mat-error>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input id="password" formControlName="password" type="password" class="custom-input">
+        <mat-error *ngIf="hasError('password', 'required')" class="error-message">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="hasError('password', 'minlength')" class="error-message">
+          Password must be at least {{ registerForm.get('password')?.errors?.['minlength']?.requiredLength }} characters long.
+        </mat-error>
+      </div>
+
+      <button type="submit" class="submit-button">Register</button>
+    </form>
+  </div>
 </div>
