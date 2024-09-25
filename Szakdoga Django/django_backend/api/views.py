@@ -28,11 +28,6 @@ from asgiref.sync import sync_to_async
 import time
 matplotlib.use('Agg')
 
-# IMAGE_DIR = r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Angular\szakdolgozat-frontend\src\assets\images'
-# IMAGE_DIR_2 = r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Angular\szakdolgozat-frontend\dist\angular-tour-of-heroes\browser\assets\images'
-# model = load_model(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine.keras')
-# scaler = joblib.load(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine_scaler.pkl')
-
 BASE_DIR = settings.BASE_DIR 
 MEDIA_DIR = os.path.join(BASE_DIR, 'api', 'media')
 MODEL_PATH = os.path.join(BASE_DIR, 'api', 'models', 'washing_machine.keras')
@@ -40,10 +35,7 @@ SCALER_PATH = os.path.join(BASE_DIR, 'api', 'models', 'washing_machine_scaler.pk
 
 model = load_model(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
-# Define your prediction function
 def predict_power_consumption(v_rms, i_rms, s, p):
-
-    #model = load_model(r'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\models\washing_machine.keras')
 
     input_data = np.array([[v_rms, i_rms, s, p]])
     input_data_scaled = scaler.transform(input_data)
@@ -101,7 +93,6 @@ async def evaluate_model(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
-# Ensure that predict_power_consumption is defined as a regular function
 def predict_power_consumption(v_rms, i_rms, s, p):
     # Prepare the input data
     input_data = np.array([[v_rms, i_rms, s, p]])
