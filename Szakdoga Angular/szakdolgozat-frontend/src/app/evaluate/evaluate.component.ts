@@ -14,7 +14,6 @@ export class EvaluateComponent {
   plotUrl: string | undefined;
 
   constructor(private router: Router) {
-    // Access router state properties using square brackets
     const state = this.router.getCurrentNavigation()?.extras.state;
     this.predictedP = state?.['predictedP'];
     this.plotUrl = state?.['plotUrl'];

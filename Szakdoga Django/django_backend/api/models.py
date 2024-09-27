@@ -6,7 +6,6 @@ class EnergyAnalysis(models.Model):
     DEVICE_OPTIONS = [
         ('option1', 'Option 1'),
         ('option2', 'Option 2'),
-        # Add other device options here
     ]
     
     device_option = models.CharField(max_length=100, choices=DEVICE_OPTIONS)

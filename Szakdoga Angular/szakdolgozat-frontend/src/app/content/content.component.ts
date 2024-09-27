@@ -21,7 +21,6 @@ export class ContentComponent {
 
   constructor(private energyAnalysisService: EnergyAnalysisService, private router: Router) {}
 
-  // Hívjuk az API-t a formData objektummal
   predict() {
     const newPredictionData: PredictionData = {
       v_rms: this.formData.v_rms,
@@ -31,19 +30,15 @@ export class ContentComponent {
     };
     this.energyAnalysisService.getPrediction(newPredictionData).subscribe(response => {
       this.predictedP = response.predicted_power;
-      this.plotUrl = 'C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\media\prediction_plot4918.png'; // Dinamikusan beállítjuk az elérési utat
 
       if (response.image_path) {
         this.plotUrl=response.image_path;
         console.log('Image URL:', this.plotUrl);
 
       }
-            // Navigate to the evaluate route and pass the prediction data
             this.router.navigate(['/evaluate'], {
               state: { predictedP: this.predictedP, plotUrl: this.plotUrl }
             });
-            // localStorage.setItem('predictedP', JSON.stringify(this.predictedP));
-            // localStorage.setItem('plotUrl', this.plotUrl);
     });
   }
 
