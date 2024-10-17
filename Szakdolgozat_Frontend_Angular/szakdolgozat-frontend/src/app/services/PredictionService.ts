@@ -9,8 +9,8 @@ export class PredictionService {
 
   constructor(private http: HttpClient) { }
 
-  getPrediction(v_rms: number, i_rms: number, s: number, p: number) {
-    const body = { V_rms: v_rms, I_rms: i_rms, S: s, P: p };
+  getPrediction(v_rms: number, i_rms: number, s: number) {
+    const body = { V_rms: v_rms, I_rms: i_rms, S: s };
     return this.http.post<any>(this.apiUrl, body);
   }
 }

@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './evaluate.component.html',
-  styleUrl: './evaluate.component.css'
+  styleUrls: ['./evaluate.component.css']
 })
 export class EvaluateComponent {
   predictedP: number | undefined;
@@ -17,5 +17,9 @@ export class EvaluateComponent {
     const state = this.router.getCurrentNavigation()?.extras.state;
     this.predictedP = state?.['predictedP'];
     this.plotUrl = state?.['plotUrl'];
+  }
+
+  goBack() {
+    this.router.navigate(['/home']);
   }
 }

@@ -7,7 +7,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializer import EnergyAnalysisSerializer, RegisterSerializer, UserSerializer
 from django.contrib.auth.models import User
 
-# your_app/views.py
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -25,26 +24,51 @@ from django.views.decorators.http import require_http_methods
 import random
 import matplotlib
 from asgiref.sync import sync_to_async
-import time
 matplotlib.use('Agg')
 
 BASE_DIR = settings.BASE_DIR 
 MEDIA_DIR = os.path.join(BASE_DIR, 'api', 'media')
-MODEL_PATH = os.path.join(BASE_DIR, 'api', 'models', 'washing_machine.keras')
-SCALER_PATH = os.path.join(BASE_DIR, 'api', 'models', 'washing_machine_scaler.pkl')
 
-model = load_model(MODEL_PATH)
-scaler = joblib.load(SCALER_PATH)
-def predict_power_consumption(v_rms, i_rms, s, p):
 
-    input_data = np.array([[v_rms, i_rms, s, p]])
-    input_data_scaled = scaler.transform(input_data)
-    input_data_scaled = np.reshape(input_data_scaled, (1, 1, 4))
+# def predict_power_consumption(v_rms, i_rms, s):
+#     input_data = np.array([[v_rms, i_rms, s]])
+#     input_data_scaled = scaler.transform(input_data)
+#     print(f'input_data_scaled',input_data_scaled)
+#     input_data_scaled = np.reshape(input_data_scaled, (1, 1, 3))
     
-    prediction = model.predict(input_data_scaled)
-    predicted_power = float(prediction[0, 3])
+#     prediction = model.predict(input_data_scaled)
+#     predicted_power = float(prediction[0, 2])  # Assuming the model predicts the power at index 2
 
-    return predicted_power
+#     return predicted_power
+def predict_power_consumption(v_rms, i_rms, s,device):
+    MODEL_PATH = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}.keras')
+    #SCALER_PATH = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}_scaler.pkl')
+    INPUT_SCALER = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}_scaler_features.pkl')
+    OUTPUT_SCALER = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}_scaler_target.pkl')
+    model = load_model(MODEL_PATH)
+    #scaler = joblib.load(SCALER_PATH)
+    input_scaler = joblib.load(INPUT_SCALER)
+    output_scaler = joblib.load(OUTPUT_SCALER)
+    # Bemeneti adatok DataFrame-ként, mivel a scaler feature nevekkel lett fitelve
+    input_data = pd.DataFrame([[v_rms, i_rms, s]], columns=['V_rms', 'I_rms', 'S'])
+    
+    # Bemeneti adat skálázása
+    input_data_scaled = input_scaler.transform(input_data)
+    input_data_scaled = np.reshape(input_data_scaled, (1, 1, 3))
+
+    # Előrejelzés
+    prediction = model.predict(input_data_scaled)
+
+    # Kimenet ellenőrzése és visszaalakítása
+    print(f'Prediction: {prediction}')
+    
+    # Ha csak egy kimeneti érték van
+    predicted_power_scaled = prediction[0, 0]  # Index 0, mert egyetlen értéket kapunk
+
+    # Kimenet visszaalakítása eredeti skálára
+    predicted_power = output_scaler.inverse_transform([[predicted_power_scaled]])[0][0]
+
+    return abs(predicted_power)
 
 
 
@@ -52,17 +76,31 @@ def predict_power_consumption(v_rms, i_rms, s, p):
 @require_http_methods(["POST"])
 async def evaluate_model(request):
     try:
+        # Log the raw request body
+        print("Raw request body:", request.body)
+        
+        # Attempt to parse the JSON data
         data = json.loads(request.body)
+        print("Parsed data:", data)
+        
+        # Check if required fields are present
+        if 'V_rms' not in data or 'I_rms' not in data or 'S' not in data:
+            return JsonResponse({'error': 'Missing required input fields'}, status=400)
 
+        # Log extracted values
         v_rms = float(data.get('V_rms'))
         i_rms = float(data.get('I_rms'))
         s = float(data.get('S'))
-        p = float(data.get('P'))
+        device = str(data.get('Device'))
+        print(f"Extracted values - V_rms: {v_rms}, I_rms: {i_rms}, S: {s}")
 
-        predicted_power = await sync_to_async(predict_power_consumption)(v_rms, i_rms, s, p)
+        # Call the prediction function
+        predicted_power = await sync_to_async(predict_power_consumption)(v_rms, i_rms, s,device)
+        print("Predicted power:", predicted_power)
 
+        # Generate and save the plot
         fig, ax = plt.subplots()
-        ax.plot([v_rms, i_rms, s, p], label='Input Data')
+        ax.plot([v_rms, i_rms, s], label='Input Data')
         ax.set_title('Predicted Power Consumption')
         ax.set_xlabel('Features')
         ax.set_ylabel('Value')
@@ -72,36 +110,31 @@ async def evaluate_model(request):
         image_filename = f'prediction_plot{random_number}.png'
         image_path = os.path.join(MEDIA_DIR, image_filename)
 
-        image_path = os.path.normpath(image_path)  
+        image_path = os.path.normpath(image_path)
         print(f"image_path: {image_path}")
 
         plt.savefig(image_path)
-        plt.close(fig) 
-        if os.path.exists(image_path):
-            print(image_path)
-            print("A kép létezik.")
-        else:
-            print("A kép nem létezik.")
+        plt.close(fig)
 
+        if os.path.exists(image_path):
+            print("Image exists:", image_path)
+        else:
+            print("Image does not exist.")
+
+        # Send the response
         response_data = {
-            'image_path': request.build_absolute_uri('/api' + settings.MEDIA_URL + image_filename),  
+            'image_path': request.build_absolute_uri('/api' + settings.MEDIA_URL + image_filename),
             'predicted_power': predicted_power
         }
 
         return JsonResponse(response_data)
 
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except ValueError as e:
+        return JsonResponse({'error': f'Invalid input data: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-
-def predict_power_consumption(v_rms, i_rms, s, p):
-    input_data = np.array([[v_rms, i_rms, s, p]])
-    input_data_scaled = scaler.transform(input_data)
-    input_data_scaled = np.reshape(input_data_scaled, (1, 1, 4)) 
-    
-    prediction = model.predict(input_data_scaled)
-    predicted_power = float(prediction[0, 3])
-
-    return predicted_power
 
 @api_view(['GET'])
 def get_users(request):

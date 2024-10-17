@@ -14,7 +14,7 @@ export class EnergyAnalysisService {
   constructor(private http: HttpClient) { }
 
   getPrediction(object : PredictionData) {
-    const body = { V_rms: object.v_rms, I_rms: object.i_rms, S: object.s, P: object.p };
+    const body = { V_rms: object.v_rms, I_rms: object.i_rms, S: object.s,Device:object.device};
     return this.http.post<any>('http://127.0.0.1:8000/api/predict/', body);
   }
 
@@ -34,7 +34,6 @@ export class EnergyAnalysisService {
     formData.append('prediction_model', data.prediction_model);
     formData.append('V_rms', data.V_rms.toString());
     formData.append('I_rms', data.I_rms.toString());
-    formData.append('P', data.P.toString());
     formData.append('S', data.S.toString());
     formData.append('start_date', data.start_date);
     formData.append('end_date', data.end_date);

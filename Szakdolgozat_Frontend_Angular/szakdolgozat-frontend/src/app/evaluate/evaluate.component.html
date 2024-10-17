@@ -1,6 +1,12 @@
-<div class="content">
+<div class="result-container">
+  <div class="card">
     <h2>Prediction Results</h2>
-    <p>Predicted Power: {{ predictedP }}</p>
-    <img [src]="plotUrl" *ngIf="plotUrl" alt="Prediction Plot">
+    <div class="result-details">
+      <p><strong>Predicted Power:</strong> {{ predictedP }} W</p>
+      <div class="plot-container">
+        <img [src]="plotUrl" *ngIf="plotUrl" alt="Prediction Plot">
+      </div>
+    </div>
+    <button class="back-button" (click)="goBack()">Go Back</button>
   </div>
-  
+</div>
