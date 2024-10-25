@@ -1,5 +1,5 @@
 MEDIA_URL: /media/
-MEDIA_ROOT: C:\Users\Martin\Desktop\szakdoga\Projekt\Szakdolgozat_Projekt\Szakdoga Django\django_backend\api\media
+MEDIA_ROOT: /app/api/media
 URL Patterns:
 users/energy/
 register/

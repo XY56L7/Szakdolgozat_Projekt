@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-tour-of-heroes": {
+    "szakdolgozat-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-tour-of-heroes",
+            "outputPath": "dist/szakdolgozat-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-tour-of-heroes:build:production"
+              "buildTarget": "szakdolgozat-frontend:build:production"
             },
             "development": {
-              "buildTarget": "angular-tour-of-heroes:build:development"
+              "buildTarget": "szakdolgozat-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "angular-tour-of-heroes:build"
+            "buildTarget": "szakdolgozat-frontend:build"
           }
         },
         "test": {
