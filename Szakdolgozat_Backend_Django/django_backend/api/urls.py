@@ -14,15 +14,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
-    with open("debug_info.txt", "w") as debug_file:
-        debug_file.write(f"MEDIA_URL: {settings.MEDIA_URL}\n")
-        debug_file.write(f"MEDIA_ROOT: {settings.MEDIA_ROOT}\n")
-        
-        # Write each URL pattern's path to the file
-        debug_file.write("URL Patterns:\n")
-        for pattern in urlpatterns:
-            debug_file.write(f"{pattern.pattern}\n")  
-
 
 

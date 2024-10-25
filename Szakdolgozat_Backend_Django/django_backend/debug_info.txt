@@ -1,9 +1,0 @@
-MEDIA_URL: /media/
-MEDIA_ROOT: /app/api/media
-URL Patterns:
-users/energy/
-register/
-login/
-users/
-predict/
-^media/(?P<path>.*)$
