@@ -1,9 +1,18 @@
 <div class="navbar" id="navbar">
     <ul>
         <p *ngIf="isAuthenticated">&nbsp;&nbsp;&nbsp;&nbsp;User : {{userName}}</p>
-        <li *ngIf="!isAuthenticated"><a [routerLink]="['/register']" id="registerLink"> Register</a></li>
-        <li *ngIf="!isAuthenticated"><a [routerLink]="['/login']" id="loginLink"> Log In</a></li>
-        <!-- In your HTML template -->
+        <li *ngIf="!isAuthenticated">
+            <a [routerLink]="['/register']" id="registerLink">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJibGFjayIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8cGF0aCBkPSJNMTIgMTJjMi4yMDkgMCA0LTEuNzkxIDQtNHMtMS43OTEtNC00LTQtNCAxLjc5MS00IDQgMS43OTEgNCA0IDR6bTAgMmMtMi42NyAwLTggMS4zMzktOCA0djNoMTZ2LTNjMC0yLjY2MS01LjMzLTQtOC00em0xMC04aC0zdjNoLTJ2LTNoLTN2LTJoM3YtM2gydjNoM3YyeiIvPgo8L3N2Zz4=" alt="Register Icon">
+                Register
+            </a>
+        </li>
+        <li *ngIf="!isAuthenticated">
+            <a [routerLink]="['/login']" id="loginLink">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJibGFjayIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8cGF0aCBkPSJNMTUuNSAySDVjLS44MyAwLTEuNS42Ny0xLjUgMS41djE3YzAgLjgzLjY3IDEuNSAxLjUgMS41aDEwYy44MyAwIDEuNS0uNjcgMS41LTEuNXYtM2gtMnYySDZWNWg5djJoMnYtMy41YzAtLjgzLS42Ny0xLjUtMS41LTEuNXptNC43OSA5LjI5bC0yLjU5LTIuNTktMS40MSAxLjQyIDEuODggMS44OEgxMHYyaDguMTdsLTEuODggMS44OCAxLjQxIDEuNDIgMi41OS0yLjU5Yy4zOS0uMzkuMzktMS4wMiAwLTEuNDF6Ii8+Cjwvc3ZnPg==" alt="Login Icon">
+                Log In
+            </a>
+        </li> 
         <li *ngIf="isAuthenticated">
             <button class="logout-button" (click)="logout()">Log Out</button>
         </li>

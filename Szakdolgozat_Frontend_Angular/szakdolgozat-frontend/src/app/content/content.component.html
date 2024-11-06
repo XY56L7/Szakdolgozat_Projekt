@@ -1,74 +1,74 @@
-<div class="content">
+<div class="container center-vertically">
   <h2>Energy Consumption Analysis</h2>
 
-  <form #form="ngForm">
-
-    <label for="device_option">Select the device:</label>
-    <select name="device_option" ngModel>
-      <option value="all">All devices</option>
-      <option value="specific">Select specific devices</option>
-    </select>
-    <br>
-
-    <div *ngIf="form.value.device_option === 'specific'">
-      <table>
-        <tr>
-          <td>
-            <input type="radio" (change)="onDeviceSelectionChange($event, 'hair_dryer')" id="hair_dryer" name="specific_device" class="custom-radio">
-            <label for="hair_dryer">Hair Dryer</label>
-          </td>
-          <td>
-            <input type="radio" (change)="onDeviceSelectionChange($event, 'printer')" id="printer" name="specific_device" class="custom-radio">
-            <label for="printer">Printer</label>
-          </td>
-          <td>
-            <input type="radio" (change)="onDeviceSelectionChange($event, 'washing_machine')" id="washing_machine" name="specific_device" class="custom-radio">
-            <label for="washing_machine">Washing Machine</label>
-          </td>
-          <td>
-            <input type="radio" (change)="onDeviceSelectionChange($event, 'hoover')" id="hoover" name="specific_device" class="custom-radio">
-            <label for="hoover">Hoover</label>
-          </td>
-        </tr>
-      </table>
+  <form #form="ngForm" class="form-grid">
+    <div class="column">
+      <label for="device_option">Select the device:</label> 
+      <select name="device_option" ngModel> 
+        <option value="all">All devices</option> 
+        <option value="specific">Select specific devices</option>
+      </select>
+      
+      <div *ngIf="form.value.device_option === 'specific'">
+        <table>
+          <tr>
+            <td>
+              <input type="radio" (change)="onDeviceSelectionChange($event, 'hair_dryer')" id="hair_dryer" name="specific_device" class="custom-radio">
+              <label for="hair_dryer">Hair Dryer</label>
+            </td>
+            <td>
+              <input type="radio" (change)="onDeviceSelectionChange($event, 'printer')" id="printer" name="specific_device" class="custom-radio">
+              <label for="printer">Printer</label>
+            </td>
+            <td>
+              <input type="radio" (change)="onDeviceSelectionChange($event, 'washing_machine')" id="washing_machine" name="specific_device" class="custom-radio">
+              <label for="washing_machine">Washing Machine</label>
+            </td>
+            <td>
+              <input type="radio" (change)="onDeviceSelectionChange($event, 'hoover')" id="hoover" name="specific_device" class="custom-radio">
+              <label for="hoover">Hoover</label>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <label for="time_interval">Select the time interval:</label>
+      <select name="time_interval" ngModel>
+        <option value="daily">Daily</option>
+        <option value="hourly">Hourly</option>
+        <option value="5_hourly">Every 5 Hours</option>
+      </select>
+      
+      <label for="prediction_model">Select the prediction model:</label>
+      <select name="prediction_model" ngModel>
+        <option value="LSTM">Built-in LSTM</option>
+        <option value="custom">Upload Custom Model</option>
+      </select>
+      
+      <input type="file" (change)="onFileSelected($event)" accept=".h5, .hdf5" *ngIf="form.value.prediction_model === 'custom'">
     </div>
     
+    <div class="column">
+      <label for="V_rms">Effektív feszültség (V_rms):</label>
+      <input [(ngModel)]="formData.v_rms" name="v_rms" placeholder="V_rms" type="number">
+
+      <label for="I_rms">Effektív áram (I_rms):</label>
+      <input [(ngModel)]="formData.i_rms" name="i_rms" placeholder="I_rms" type="number">
+
+      <label for="S">Active Power (S):</label>
+      <input [(ngModel)]="formData.s" name="s" placeholder="S" type="number">
+    </div>
+
+    <div class="column date-column">
+      <label for="start_date">Start Date:</label>
+      <input type="date" name="start_date" ngModel required>
+
+      <label for="end_date">End Date:</label>
+      <input type="date" name="end_date" ngModel required>
+    </div>
     
-    <br>
-    <label for="time_interval">Select the time interval:</label>
-    <select name="time_interval" ngModel>
-      <option value="daily">Daily</option>
-      <option value="hourly">Hourly</option>
-      <option value="5_hourly">Every 5 Hours</option>
-    </select>
-    <br>
-
-    <label for="prediction_model">Select the prediction model:</label>
-    <select name="prediction_model" ngModel>
-      <option value="LSTM">Built-in LSTM</option>
-      <option value="custom">Upload Custom Model</option>
-    </select>
-    <br>
-
-    <input type="file" (change)="onFileSelected($event)" accept=".h5, .hdf5" *ngIf="form.value.prediction_model === 'custom'">
-    <br>
-
-    <label for="V_rms">Effektív feszültség (V_rms):</label>
-    <input [(ngModel)]="formData.v_rms" name="v_rms" placeholder="V_rms" type="number">
-
-    <label for="I_rms">Effektív áram (I_rms):</label>
-    <input [(ngModel)]="formData.i_rms" name="i_rms" placeholder="I_rms" type="number">
-
-    <label for="S">Active Power (S):</label>
-    <input [(ngModel)]="formData.s" name="s" placeholder="S" type="number">
-
-    <label for="start_date">Start Date:</label>
-    <input type="date" name="start_date" ngModel required>
-    
-    <label for="end_date">End Date:</label>
-    <input type="date" name="end_date" ngModel required>
-
-    <button (click)="predict()" type="submit">Start Analysis</button>
+    <div class="button-container">
+      <button (click)="predict()" type="submit">Start Analysis</button>
+    </div>
   </form>
-
 </div>

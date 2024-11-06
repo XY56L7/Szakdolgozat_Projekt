@@ -4,6 +4,10 @@ body {
     margin: 0;
     padding: 0;
     transition: background-color 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 .content{
     padding-left: 250px;
@@ -11,8 +15,8 @@ body {
 }
 
 .container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 800px;
+    margin: auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -20,15 +24,28 @@ body {
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-h1 {
-    text-align: left;
-    color: #333;
-    transition: color 0.5s ease;
-    padding-right:13px;
+.center-vertically {
+    margin-top: 50px;
 }
 
-.question {
-    margin: 15px 0;
+h2 {
+    text-align: center;
+    color: #333;
+    transition: color 0.5s ease;
+}
+
+.form-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.column {
+    width: 48%;
+}
+
+.date-column {
+    width: 100%;
 }
 
 label {
@@ -39,125 +56,52 @@ label {
 
 input[type="text"],
 input[type="number"],
-
 input[type="email"],
+input[type="date"],
 select,
 textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-
-.question input[type="radio"] {
-    display: flex;
-    align-items: center;
-}
-
-.question input[type="radio"] + label {
-    margin-left: 10px;
-}
-
-input[type="checkbox"] {
-    display: inline;
-    margin-right: 5px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
 }
 
 input[type="file"] {
     display: block;
     margin-top: 5px;
+    margin-bottom: 15px;
 }
 
-input[type="submit"] {
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+button[type="submit"] {
     background-color: #4285f4;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 15px 30px;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
-}
-
-input[type="submit"]:hover {
-    background-color: #3579d8;
-}
-
-
-.dark-mode-switch {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: right;
-}
-
-.dark-mode-switch input[type="checkbox"] {
-    display: none;
-}
-
-.dark-mode-switch label {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    width: 128px;
-    height: 20px;
-    background-color: #ccc;
-    border-radius: 17px;
+    font-size: 16px;
     transition: background-color 0.3s ease;
 }
 
-.dark-mode-switch label::before {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #fff;
-    top: 2px;
-    left: 2px;
-    transition: transform 0.3s ease;
+button[type="submit"]:hover {
+    background-color: #3579d8;
 }
 
-.dark-mode-switch input[type="checkbox"]:checked + label {
-    background-color: #4285f4;
-}
-
-.dark-mode-switch input[type="checkbox"]:checked + label::before {
-    transform: translateX(108px);
-}
-
-body.dark-mode {
-    background-color: #333;
-    color: #fff;
-}
-
-.container.dark-mode {
-    background-color: #222;
-    color: #fff;
-}
-
-.container.dark-mode h1,
-h1.dark-mode {
-    color: #fff;
-}
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="date"],
-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; 
-}
 .custom-radio {
-    display: none; /* Elrejtjük az alapértelmezett gombot */
+    display: none;
 }
 
 .custom-radio + label {
     position: relative;
-    padding-left: 30px; /* Adunk helyet a gombnak */
+    padding-left: 30px;
     cursor: pointer;
     color: #333;
 }
@@ -168,27 +112,27 @@ select {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px; /* Gomb szélessége */
-    height: 20px; /* Gomb magassága */
-    border: 2px solid #4285f4; /* Határ színe */
-    border-radius: 50%; /* Kör formájú gomb */
-    background-color: #fff; /* Háttér szín */
-    transition: background-color 0.3s, border-color 0.3s; /* Animáció a színváltáshoz */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4285f4;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .custom-radio:checked + label::before {
-    background-color: #4285f4; /* Választott állapot szín */
-    border-color: #4285f4; /* Határ szín a választott állapotban */
+    background-color: #4285f4;
+    border-color: #4285f4;
 }
 
 .custom-radio:checked + label::after {
     content: '';
     position: absolute;
-    left: 7px; /* Kisebb kör középen */
+    left: 7px;
     top: 50%;
     transform: translateY(-50%);
-    width: 8px; /* Kisebb kör szélessége */
-    height: 8px; /* Kisebb kör magassága */
-    border-radius: 50%; /* Kör formájú */
-    background-color: #fff; /* Kisebb kör színe */
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #fff;
 }
