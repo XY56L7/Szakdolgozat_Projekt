@@ -2,30 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'] // Fixed 'styleUrl' to 'styleUrls'
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
 
   public isAuthenticated: boolean = false;
   public userName: string = '';
+  public isNavbarCollapsed: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {} // Inject Router
+  private collapseTimeout: any;
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    console.log('User is authenticated:', this.isAuthenticated);
     this.authService.authSubject.subscribe(authStatus => {
-      console.log('AuthServ')
-      if (authStatus) {
+      if(authStatus){
         this.isAuthenticated = true;
       }
-      console.log('User is authenticated:', this.isAuthenticated);
     });
 
     this.authService.authUserNameSubject.subscribe(authName => {
@@ -33,11 +33,28 @@ export class HeaderComponent implements OnInit {
         this.userName = authName.userName;
       }
     });
+
+    this.setNavbarCollapseTimer();
+  }
+
+  expandNavbar(): void {
+    clearTimeout(this.collapseTimeout);
+    this.isNavbarCollapsed = false;
+  }
+
+  collapseNavbar(): void {
+    this.setNavbarCollapseTimer();
+  }
+
+  private setNavbarCollapseTimer(): void {
+    this.collapseTimeout = setTimeout(() => {
+      this.isNavbarCollapsed = true;
+    }, 3000); // 3 másodperc után összehúzza a navbar-t
   }
 
   logout(): void {
-    this.authService.logout(); // Call the logout method from AuthService
-    this.isAuthenticated = false; // Update local state
-    this.router.navigate(['/login']); // Redirect to login page
+    this.authService.logout();
+    this.isAuthenticated = false;
+    this.router.navigate(['/login']);
   }
 }

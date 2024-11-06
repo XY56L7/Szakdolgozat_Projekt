@@ -28,9 +28,9 @@ body {
     margin-top: 50px;
 }
 
-h2 {
+h1 {
     text-align: center;
-    color: #333;
+    color: #4c3ea4;
     transition: color 0.5s ease;
 }
 

@@ -13,10 +13,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent {
-  formData: PredictionData = { v_rms: 0, i_rms: 0, s: 0, device: '' }; // Using the model
+  formData: PredictionData = { v_rms: 0, i_rms: 0, s: 0, device: '' };
   predictedP: number | undefined;
   plotUrl: string | undefined;
-  selectedDevice: string | null = null; // Changed to a single selected device
+  selectedDevice: string | null = null; 
   customModelFile: File | null = null;
 
   constructor(private energyAnalysisService: EnergyAnalysisService, private router: Router) {}
@@ -26,7 +26,7 @@ export class ContentComponent {
       v_rms: this.formData.v_rms,
       i_rms: this.formData.i_rms,
       s: this.formData.s,
-      device: this.selectedDevice || '' // Use selectedDevice
+      device: this.selectedDevice || '' 
     };
 
     this.energyAnalysisService.getPrediction(newPredictionData).subscribe(response => {
@@ -48,7 +48,6 @@ export class ContentComponent {
   }
 
   onDeviceSelectionChange(event: any, device: string): void {
-    // Set the selected device based on the radio button checked state
     if (event.target.checked) {
       this.selectedDevice = device;
     }

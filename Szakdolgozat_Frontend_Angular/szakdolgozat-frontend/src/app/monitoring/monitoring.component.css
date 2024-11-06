@@ -3,31 +3,31 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0; /* Light background color */
+  background-color: #f0f0f0;
 }
 
 .wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
+  height: 100vh; 
+  width: 100vw; 
 }
 
 .image-container {
 
-  width: 700px; /* Container width */
-  max-width: 90vw; /* Make sure it fits smaller screens */
-  height: auto; /* Height will depend on content */
+  width: 700px; 
+  max-width: 90vw; 
+  height: auto; 
   border: 2px solid #ddd;
   border-radius: 15px;
   padding: 20px;
   background-color: #ffffff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow to make it stand out */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center content within the container */
+  justify-content: center; 
   margin: 100px 0;
 }
 
