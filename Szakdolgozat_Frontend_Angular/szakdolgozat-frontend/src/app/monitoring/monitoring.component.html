@@ -1,9 +1,9 @@
-<div class="image-container">
-
+<div class="wrapper">
+  <div class="image-container">
     <img [src]="currentImage" alt="Image Switcher" class="image">
-  
-   <label >Change the picture</label>
-  <button (click)="switchImage()" class="circle-btn">⭯</button>
+    <div class="button-container">
+      <button (click)="switchImage()" class="circle-btn">⭯</button>
+      <label class="label">Change the picture</label>
+    </div>
+  </div>
 </div>
-
-  
