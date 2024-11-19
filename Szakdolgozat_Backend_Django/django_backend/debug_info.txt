@@ -1,9 +1,0 @@
-MEDIA_URL: /media/
-MEDIA_ROOT: C:\Users\Martin\Desktop\szakdoga\Szakdolgozat_Projekt\Szakdolgozat_Backend_Django\django_backend\api\media
-URL Patterns:
-users/energy/
-register/
-login/
-users/
-predict/
-^media/(?P<path>.*)$
