@@ -9,9 +9,15 @@ body {
     justify-content: center;
     min-height: 100vh;
 }
-.content{
+
+.content {
     padding-left: 250px;
     margin-right: 10px;
+    /* Removed any top padding or margin to prevent affecting the background */
+}
+
+.form-container {
+    padding-top: 50px; /* Apply top padding only to the form */
 }
 
 .container {
@@ -25,7 +31,7 @@ body {
 }
 
 .center-vertically {
-    margin-top: 50px;
+    margin-top: 0; /* Remove margin-top to prevent affecting the background */
 }
 
 h1 {

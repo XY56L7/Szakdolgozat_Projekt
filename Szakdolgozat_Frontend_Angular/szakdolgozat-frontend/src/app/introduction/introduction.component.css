@@ -1,0 +1,162 @@
+/* Parent Container */
+.content {
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Rounded Container Styles */
+  .rounded-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Internal padding */
+    max-width: 1200px; /* Adjust as needed */
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 0 auto; /* Center the container horizontally */
+  }
+  
+  /* Adjust child sections to fit within rounded container */
+  .rounded-container > div {
+    border-radius: inherit; /* Inherit rounded corners */
+    overflow: hidden; /* Prevent content from overflowing rounded corners */
+  }
+  
+  /* Hero Section Styles */
+  .hero-section {
+    background-color: #00a859; /* FlexyGrid green */
+    border-radius: inherit; /* Inherit rounded corners */
+  }
+  
+  .hero-content {
+    padding: 50px 0;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .hero-section .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  /* Intro Text Section Styles */
+  .intro-text-section {
+    background-color: #f8f9fa; /* Light gray background */
+  }
+  
+  .intro-text-section h2 {
+    color: #00a859;
+    margin-bottom: 20px;
+  }
+  
+  .intro-text-section .lead {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  
+  .intro-text-section p {
+    color: #333;
+  }
+  
+  /* Features Cards Section Styles */
+  .features-cards-section {
+    background-color: #ffffff; /* White background */
+  }
+  
+  .features-cards-section h3 {
+    color: #00a859;
+  }
+  
+  .features-cards-section .card-title {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .features-cards-section .card-text {
+    color: #555;
+  }
+  
+  /* Image Left, Text Right Section Styles */
+  .image-text-section {
+    background-color: #f8f9fa; /* Light gray background */
+  }
+  
+  .image-text-section h3 {
+    color: #00a859;
+    margin-bottom: 20px;
+  }
+  
+  .image-text-section h5 {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .image-text-section p {
+    color: #333;
+  }
+  
+  /* "You're in Control" Section Styles */
+  .control-section {
+    background-color: #ffffff; /* White background */
+  }
+  
+  .control-section h3 {
+    color: #00a859;
+    margin-bottom: 20px;
+  }
+  
+  .control-section .lead {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  
+  .control-section p {
+    color: #333;
+  }
+  
+  /* "Easy and Intuitive" Section Styles */
+  .easy-intuitive-section {
+    background-color: #f8f9fa; /* Light gray background */
+  }
+  
+  .easy-intuitive-section h3 {
+    color: #00a859;
+    margin-bottom: 20px;
+  }
+  
+  .easy-intuitive-section .lead {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  
+  .easy-intuitive-section ul {
+    color: #333;
+    padding-left: 20px;
+  }
+  
+  .easy-intuitive-section ul li {
+    margin-bottom: 10px;
+  }
+  .hover-effect img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, outline 0.3s ease;
+    outline: none; /* Alapértelmezett állapotban nincs outline */
+  }
+
+  .hover-effect img:hover {
+    transform: scale(1.05); /* Kicsit nagyítja a képet */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.7); /* Mélyebb árnyék hoverkor */
+    outline: 3px solid #FFFFFF; /* Fehér outline hoverkor */
+  }
+  .hover-effect-black img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, outline 0.3s ease;
+    outline: none; /* Alapértelmezett állapotban nincs outline */
+  }
+
+  .hover-effect-black img:hover {
+    transform: scale(1.05); /* Kicsit nagyítja a képet */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.7); /* Mélyebb árnyék hoverkor */
+    outline: 3px solid #000000; /* Fekete outline hoverkor */
+  }

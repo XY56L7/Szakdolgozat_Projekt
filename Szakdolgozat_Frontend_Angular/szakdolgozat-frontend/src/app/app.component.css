@@ -1,24 +1,36 @@
-@keyframes fadeBackgrounds {
-    0% { background-image: url('../assets/images/backgrounds/bg-1.jpg'); }
-    20% { background-image: url('../assets/images/backgrounds/bg-1.jpg'); }
-    25% { background-image: url('../assets/images/backgrounds/bg-3.jpg'); }
-    45% { background-image: url('../assets/images/backgrounds/bg-3.jpg'); }
-    50% { background-image: url('../assets/images/backgrounds/bg-6.jpg'); }
-    70% { background-image: url('../assets/images/backgrounds/bg-6.jpg'); }
-    75% { background-image: url('../assets/images/backgrounds/bg-4.jpg'); }
-    95% { background-image: url('../assets/images/backgrounds/bg-4.jpg'); }
-    100% { background-image: url('../assets/images/backgrounds/bg-5.jpg'); }
-}
+/* app.component.css */
 
+/* Background Wrapper */
 .background {
-    animation: fadeBackgrounds 30s infinite;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    position: relative;
     min-height: 100vh;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    background-size: cover;
+    background-position: center;
+    animation: backgroundAnimation 30s infinite;
+  }
+  
+  /* Background Animation */
+  @keyframes backgroundAnimation {
+    0% {
+      --bg-image: url('../assets/images/backgrounds/bg-1.jpg');
+    }
+    25% {
+      --bg-image: url('../assets/images/backgrounds/bg-3.jpg');
+    }
+    50% {
+      --bg-image: url('../assets/images/backgrounds/bg-6.jpg');
+    }
+    75% {
+      --bg-image: url('../assets/images/backgrounds/bg-4.jpg');
+    }
+    100% {
+      --bg-image: url('../assets/images/backgrounds/bg-1.jpg');
+    }
+  }
+  
+  .background {
+    background-image: var(--bg-image);
     transition: background-image 1s ease-in-out;
-}
+  }
+  

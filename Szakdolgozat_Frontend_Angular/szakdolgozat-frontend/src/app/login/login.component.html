@@ -1,23 +1,26 @@
 <div class="content">
-  <div class="login-container">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input id="username" formControlName="username" type="text" class="custom-input">
-        <mat-error *ngIf="hasError('username', 'required')" class="error-message">
-          Username is required
-        </mat-error>
-      </div>
-      
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input id="password" formControlName="password" type="password" class="custom-input">
-        <mat-error *ngIf="hasError('password', 'required')" class="error-message">
-          Password is required
-        </mat-error>
-      </div>
-      
-      <button type="submit" class="submit-button">Login</button>
-    </form>
+
+  <div class="form-container">
+    <div class="login-container">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input id="username" formControlName="username" type="text" class="custom-input">
+          <mat-error *ngIf="hasError('username', 'required')" class="error-message">
+            Username is required
+          </mat-error>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input id="password" formControlName="password" type="password" class="custom-input">
+          <mat-error *ngIf="hasError('password', 'required')" class="error-message">
+            Password is required
+          </mat-error>
+        </div>
+
+        <button type="submit" class="submit-button">Login</button>
+      </form>
+    </div>
   </div>
 </div>

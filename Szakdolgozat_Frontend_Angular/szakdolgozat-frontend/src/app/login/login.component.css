@@ -2,9 +2,13 @@
   padding-left: 250px;
 }
 
+.form-container {
+  padding-top: 50px; 
+}
+
 .login-container {
   max-width: 500px;
-  margin: 200px auto;
+  margin: auto; 
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -49,5 +53,5 @@ label {
   background-color: #6200ea;
   color: white;
   border: none;
-  border-radius: 8px
+  border-radius: 8px;
 }

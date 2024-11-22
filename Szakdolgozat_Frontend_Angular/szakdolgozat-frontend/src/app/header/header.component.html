@@ -17,7 +17,13 @@
                 <button class="logout-button" (click)="logout()">Log Out</button>
             </li>
             <li>
-                <a href="#household" id="householdeLink">
+                <a [routerLink]="['/introduction']" id="Introduction">
+                    <img src="{{ '/assets/images/introduction.png' }}" alt="Introduction">
+                    <span>Introduction</span>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/home']" id="householdeLink">
                     <img src="{{ '/assets/images/home.png' }}" alt="Household Icon">
                     <span>Household</span>
                 </a>
