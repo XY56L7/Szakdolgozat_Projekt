@@ -6,3 +6,4 @@ db.sqlite3
 
 # Miscellaneous
 debug_info.txt
+*.png
