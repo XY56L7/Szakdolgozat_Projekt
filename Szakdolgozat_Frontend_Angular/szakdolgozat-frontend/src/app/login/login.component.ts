@@ -14,22 +14,30 @@ import { MatError } from '@angular/material/form-field';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  valid: boolean
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+    this.valid = true;
   }
 
   hasError(controlName: string, errorName: string) {
     return this.loginForm.controls[controlName].hasError(errorName);
   }
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe(response => {
+        this.valid = true;
         this.router.navigate(['/']);
-      });
+      },
+    err => {
+      this.valid = false;
+      this.loginForm.controls['password'].patchValue('');
+    });
     }
   }
 }

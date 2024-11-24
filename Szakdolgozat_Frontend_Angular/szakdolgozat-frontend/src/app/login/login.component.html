@@ -18,6 +18,9 @@
       </div>
       
       <button type="submit" class="submit-button">Login</button>
+      <mat-error *ngIf="!valid" class="error-message">
+        Wrong username or password
+      </mat-error>
     </form>
   </div>
 </div>
