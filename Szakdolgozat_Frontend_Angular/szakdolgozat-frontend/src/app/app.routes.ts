@@ -9,9 +9,8 @@ import { EvaluateComponent } from './evaluate/evaluate.component';
 import { IntroductionComponent } from './introduction/introduction.component';
 
 export const routes: Routes = [
-  { path: 'introduction', component: IntroductionComponent },
+  { path: 'home', component: IntroductionComponent },
   { path: '', component: IntroductionComponent },
-  { path: 'home', component: ContentComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'monitoring', component: MonitoringComponent },
