@@ -17,25 +17,25 @@
                 <button class="logout-button" (click)="logout()">Log Out</button>
             </li>
             <li>
-                <a href="#household" id="householdeLink">
+                <a [routerLink]="['/home']" id="householdeLink">
                     <img src="{{ '/assets/images/home.png' }}" alt="Household Icon">
                     <span>Household</span>
                 </a>
             </li>
             <li>
-                <a href="#evaluation" id="evaluationLink">
+                <a [routerLink]="['/home']" id="evaluationLink">
                     <img src="{{ '/assets/images/axis.png' }}" alt="Evaluation Icon">
                     <span>Evaluation</span>
                 </a>
             </li>
             <li>
-                <a href="#battery" id="batteryLink">
+                <a [routerLink]="['/home']" id="batteryLink">
                     <img src="{{ '/assets/images/charging.png' }}" alt="Battery Icon">
                     <span>Battery management</span>
                 </a>
             </li>
             <li>
-                <a href="#subsystem" id="suvsystemLink">
+                <a [routerLink]="['/home']" id="suvsystemLink">
                     <img src="{{ '/assets/images/simulink.png' }}" alt="Subsystem Icon">
                     <span>Subsystem co-simulation</span>
                 </a>
