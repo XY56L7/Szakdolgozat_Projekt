@@ -42,25 +42,37 @@
     border-color: #007bff;
   }
   
-  /* Intro Text Section Styles */
-  .intro-text-section {
-    background-color: #f8f9fa; /* Light gray background */
-  }
-  
-  .intro-text-section h2 {
-    color: #00a859;
-    margin-bottom: 20px;
-  }
-  
-  .intro-text-section .lead {
-    font-size: 1.25rem;
-    margin-bottom: 20px;
-  }
-  
-  .intro-text-section p {
-    color: #333;
-  }
-  
+/* Intro Text Section Styles */
+.intro-text-section {
+  background-color: #ffffff; /* Fehér háttér */
+  padding: 50px 0;
+}
+
+.intro-text-section .intro-title {
+  color: #05cab6; /* Zöld szöveg */
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.intro-card {
+  background-color: rgba(5, 202, 182, 0.1); /* Halvány zöld háttér */
+  border: none; /* Eltávolítjuk a keretet */
+  border-radius: 10px; /* Lekerekített sarkok */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Árnyék a kártyák alatt */
+}
+
+.intro-card .card-body {
+  padding: 20px; /* Kényelmes belső margók */
+}
+
+.intro-card .card-text {
+  color: #05cab6; /* Szöveg színe */
+  font-family: 'Overpass', sans-serif; /* Egységes betűtípus */
+  line-height: 1.8;
+}
+
+
   /* Features Cards Section Styles */
   .features-cards-section {
     background-color: #ffffff; /* White background */
@@ -160,3 +172,27 @@
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.7); /* Mélyebb árnyék hoverkor */
     outline: 3px solid #000000; /* Fekete outline hoverkor */
   }
+  /* Peer-to-Peer Section Styles */
+.peer-to-peer-section {
+  background-color: #ffffff; /* Fehér háttér */
+  padding: 50px 0;
+}
+
+.peer-to-peer-section h3 {
+  color: #05cab6; /* Zöld szöveg */
+  font-size: 23px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.peer-to-peer-section p {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #05cab6; /* Zöld szöveg */
+  margin-top: 10px;
+}
+
+.peer-to-peer-section img {
+  border-radius: 10px; /* Lekerekített sarkok */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Árnyék */
+}
