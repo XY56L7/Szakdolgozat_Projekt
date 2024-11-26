@@ -127,6 +127,13 @@
 
     .navbar-toggle-icon {
         font-size: 24px;
+        outline: 2px solid #333; /* Outline hozzáadása */
+        padding: 5px; /* Kis belső térköz az outline körül */
+        border-radius: 4px; /* Sima sarkok */
+    }
+
+    .navbar-toggle-icon:hover {
+        outline-color: #555; /* Hover állapot outline színe */
     }
 
     .navbar-container {
@@ -173,7 +180,7 @@
 
     .navbar ul li a img,
     .navbar ul li button img {
-        margin-right: 12px;
+        display: none; /* Ikonok elrejtése telefonos nézetben */
     }
 
     .navbar ul li a span,

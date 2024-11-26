@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
 
     this.setNavbarCollapseTimer();
   }
+  
   toggleNavbar(): void {
     this.isNavbarExpanded = !this.isNavbarExpanded;
   }
