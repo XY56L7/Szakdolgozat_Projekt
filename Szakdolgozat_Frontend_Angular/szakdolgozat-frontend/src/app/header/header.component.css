@@ -100,3 +100,123 @@
     background-color: #333;
     color: white;
 }
+
+
+.navbar-toggle {
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+
+    .navbar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background-color: #f8f8f8;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .navbar-toggle span {
+        font-size: 18px;
+        color: #333;
+    }
+
+    .navbar-toggle-icon {
+        font-size: 24px;
+    }
+
+    .navbar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        z-index: 10;
+        overflow: hidden;
+    }
+
+    .navbar-container:hover {
+        width: 100%;
+    }
+
+    .navbar {
+        width: 100%;
+        height: auto;
+        background-color: #f8f8f8;
+        padding-top: 0;
+        box-shadow: none;
+        border-radius: 0;
+        transition: max-height 0.3s ease;
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .navbar.expanded {
+        max-height: 500px; 
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar ul li a,
+    .navbar ul li button {
+        width: 100%;
+        padding: 15px 20px;
+        justify-content: flex-start;
+    }
+
+    .navbar ul li a img,
+    .navbar ul li button img {
+        margin-right: 12px;
+    }
+
+    .navbar ul li a span,
+    .navbar ul li button span {
+        display: inline;
+    }
+
+    .content {
+        margin-top: 60px;
+    }
+}
+
+@media (min-width: 769px) {
+    .navbar-toggle {
+        display: none;
+    }
+
+    .navbar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 60px;
+        transition: all 0.3s ease;
+        z-index: 10;
+        overflow: hidden;
+    }
+
+    .navbar-container:hover {
+        width: 200px;
+    }
+
+    .navbar {
+        height: 100vh;
+        background-color: #f8f8f8;
+        padding-top: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        transition: width 0.3s ease, background-color 0.3s ease;
+        overflow-y: auto;
+    }
+
+}

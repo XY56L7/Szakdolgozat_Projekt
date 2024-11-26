@@ -1,54 +1,61 @@
 <div class="navbar-container" id="navbarContainer">
-    <div class="navbar" id="navbar">
+    <div class="navbar-toggle" (click)="toggleNavbar()">
+        <span>Enercom1</span>
+        <span class="navbar-toggle-icon">&#9776;</span> 
+    </div>
+
+    <!-- Navbar Menu -->
+    <div class="navbar" id="navbar" [ngClass]="{'expanded': isNavbarExpanded}">
         <ul>
             <li *ngIf="!isAuthenticated">
                 <a [routerLink]="['/register']" id="registerLink">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJibGFjayIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8cGF0aCBkPSJNMTIgMTJjMi4yMDkgMCA0LTEuNzkxIDQtNHMtMS43OTEtNC00LTQtNCAxLjc5MS00IDQgMS43OTEgNCA0IDR6bTAgMmMtMi42NyAwLTggMS4zMzktOCA0djNoMTZ2LTNjMC0yLjY2MS01LjMzLTQtOC00em0xMC04aC0zdjNoLTJ2LTNoLTN2LTJoM3YtM2gydjNoM3YyeiIvPgo8L3N2Zz4=" alt="Register Icon">
-                    <span>Register</span> 
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJibGFjayIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8cGF0aCBkPSJNMTIgMTJjMi4yMDkgMCA0LTEuNzkxIDQtNHMtMS43OTEtNC00LTQtNCAxLjc5MS00IDQgMS43OTEgNCA0IDR6bTAgMmMtMi42NyAwLTggMS4zMzktOCA0djNoMTZ2LTNjMC0yLjY2MS01LjMzLTQtOC00em0xMC04aC0zdjNoLTJ2LTNoLTN2LTJoM3YtM2gydjNoM3YyeiIvPgo8L3N2Zz4=" alt="Register Icon">                    <span>Register</span> 
                 </a>
             </li>
             <li *ngIf="!isAuthenticated">
                 <a [routerLink]="['/login']" id="loginLink">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJibGFjayIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8cGF0aCBkPSJNMTUuNSAySDVjLS44MyAwLTEuNS42Ny0xLjUgMS41djE3YzAgLjgzLjY3IDEuNSAxLjUgMS41aDEwYy44MyAwIDEuNS0uNjcgMS41LTEuNXYtM2gtMnYySDZWNWg5djJoMnYtMy41YzAtLjgzLS42Ny0xLjUtMS41LTEuNXptNC43OSA5LjI5bC0yLjU5LTIuNTktMS40MSAxLjQyIDEuODggMS44OEgxMHYyaDguMTdsLTEuODggMS44OCAxLjQxIDEuNDIgMi41OS0yLjU5Yy4zOS0uMzkuMzktMS4wMiAwLTEuNDF6Ii8+Cjwvc3ZnPg==" alt="Login Icon">
-                   <span>Log In</span> 
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJibGFjayIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8cGF0aCBkPSJNMTUuNSAySDVjLS44MyAwLTEuNS42Ny0xLjUgMS41djE3YzAgLjgzLjY3IDEuNSAxLjUgMS41aDEwYy44MyAwIDEuNS0uNjcgMS41LTEuNXYtM2gtMnYySDZWNWg5djJoMnYtMy41YzAtLjgzLS42Ny0xLjUtMS41LTEuNXptNC43OSA5LjI5bC0yLjU5LTIuNTktMS40MSAxLjQyIDEuODggMS44OEgxMHYyaDguMTdsLTEuODggMS44OCAxLjQxIDEuNDIgMi41OS0yLjU5Yy4zOS0uMzkuMzktMS4wMiAwLTEuNDF6Ii8+Cjwvc3ZnPg==" alt="Login Icon">                    <span>Log In</span> 
                 </a>
             </li> 
             <li *ngIf="isAuthenticated">
-                <button class="logout-button" (click)="logout()">Log Out</button>
+                <button class="logout-button" (click)="logout()">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB..." alt="Logout Icon">
+                    <span>Log Out</span>
+                </button>
             </li>
             <li>
                 <a [routerLink]="['/']" id="Introduction">
-                    <img src="{{ '/assets/images/introduction.png' }}" alt="Introduction">
+                    <img src="/assets/images/introduction.png" alt="Introduction">
                     <span>Introduction</span>
                 </a>
             </li>
             <li>
                 <a [routerLink]="['/platform']" id="householdeLink">
-                    <img src="{{ '/assets/images/home.png' }}" alt="Household Icon">
+                    <img src="/assets/images/home.png" alt="Household Icon">
                     <span>Household</span>
                 </a>
             </li>
             <li>
                 <a [routerLink]="['/platform']" id="evaluationLink">
-                    <img src="{{ '/assets/images/axis.png' }}" alt="Evaluation Icon">
+                    <img src="/assets/images/axis.png" alt="Evaluation Icon">
                     <span>Evaluation</span>
                 </a>
             </li>
             <li>
                 <a [routerLink]="['/platform']" id="batteryLink">
-                    <img src="{{ '/assets/images/charging.png' }}" alt="Battery Icon">
+                    <img src="/assets/images/charging.png" alt="Battery Icon">
                     <span>Battery management</span>
                 </a>
             </li>
             <li>
                 <a [routerLink]="['/platform']" id="suvsystemLink">
-                    <img src="{{ '/assets/images/simulink.png' }}" alt="Subsystem Icon">
+                    <img src="/assets/images/simulink.png" alt="Subsystem Icon">
                     <span>Subsystem co-simulation</span>
                 </a>
             </li>
             <li>
                 <a [routerLink]="['/monitoring']" id="monitoringLink">
-                    <img src="{{ '/assets/images/analytics.png' }}" alt="Monitoring Icon">
+                    <img src="/assets/images/analytics.png" alt="Monitoring Icon">
                     <span>Monitoring and diagnosis</span>
                 </a>
             </li>
@@ -57,5 +64,4 @@
 </div>
 
 <div class="content">
-
 </div>

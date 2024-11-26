@@ -1,40 +1,46 @@
 <div class="content">
-
   <div class="form-container">
-    <div class="register-container">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="username">Username:</label>
-          <input id="username" formControlName="username" type="text" class="custom-input">
-          <mat-error *ngIf="hasError('username', 'required')" class="error-message">
-            Username is required
-          </mat-error>
+    <div class="form-inner-container">
+      <div class="row">
+        <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
+          <img src="assets/images/login.gif" alt="Register GIF" class="img-fluid">
         </div>
+        <div class="col-md-6">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input id="username" formControlName="username" type="text" class="form-control custom-input">
+              <mat-error *ngIf="hasError('username', 'required')" class="error-message">
+                Username is mandatory
+              </mat-error>
+            </div>
 
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input id="email" formControlName="email" type="email" class="custom-input">
-          <mat-error *ngIf="hasError('email', 'required')" class="error-message">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="hasError('email', 'email')" class="error-message">
-            Invalid email format
-          </mat-error>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input id="email" formControlName="email" type="email" class="form-control custom-input">
+              <mat-error *ngIf="hasError('email', 'required')" class="error-message">
+                Email is mandatory
+              </mat-error>
+              <mat-error *ngIf="hasError('email', 'email')" class="error-message">
+                Email address is invalid
+              </mat-error>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input id="password" formControlName="password" type="password" class="form-control custom-input">
+              <mat-error *ngIf="hasError('password', 'required')" class="error-message">
+                Password is mandatory
+              </mat-error>
+              <mat-error *ngIf="hasError('password', 'minlength')" class="error-message">
+                The length of the password must be at least {{ registerForm.get('password')?.errors?.['minlength']?.requiredLength }} long.
+              </mat-error>
+            </div>
+
+            <button type="submit" class="submit-button">Registration</button>
+          </form>
         </div>
-
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input id="password" formControlName="password" type="password" class="custom-input">
-          <mat-error *ngIf="hasError('password', 'required')" class="error-message">
-            Password is required
-          </mat-error>
-          <mat-error *ngIf="hasError('password', 'minlength')" class="error-message">
-            Password must be at least {{ registerForm.get('password')?.errors?.['minlength']?.requiredLength }} characters long.
-          </mat-error>
-        </div>
-
-        <button type="submit" class="submit-button">Register</button>
-      </form>
+      </div>
     </div>
   </div>
 </div>

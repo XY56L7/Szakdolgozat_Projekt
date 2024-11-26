@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   public isAuthenticated: boolean = false;
   public userName: string = '';
   public isNavbarCollapsed: boolean = false;
+  public isNavbarExpanded: boolean = false;
 
   private collapseTimeout: any;
 
@@ -36,7 +37,9 @@ export class HeaderComponent implements OnInit {
 
     this.setNavbarCollapseTimer();
   }
-
+  toggleNavbar(): void {
+    this.isNavbarExpanded = !this.isNavbarExpanded;
+  }
   expandNavbar(): void {
     clearTimeout(this.collapseTimeout);
     this.isNavbarCollapsed = false;
@@ -49,7 +52,7 @@ export class HeaderComponent implements OnInit {
   private setNavbarCollapseTimer(): void {
     this.collapseTimeout = setTimeout(() => {
       this.isNavbarCollapsed = true;
-    }, 3000); // 3 másodperc után összehúzza a navbar-t
+    }, 3000); 
   }
 
   logout(): void {

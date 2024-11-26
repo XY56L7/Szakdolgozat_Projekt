@@ -1,81 +1,168 @@
-<div class="content">
-  <!-- Parent component with inherited background -->
-  
-  <div class="form-container">
-    <!-- Apply top padding here -->
-    <div class="container">
-      <h1>Energy Consumption Analysis</h1>
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow-lg" style="max-width: 900px; width: 100%;">
+    <div class="row g-0">
+      <!-- GIF oszlop -->
+      <div class="col-md-5 d-none d-md-flex justify-content-center align-items-center">
+        <img src="https://media.giphy.com/media/3oz8xJGmKVegkj8r8Q/giphy.gif?cid=790b7611yl7dh7ceo3000ggohn8oibm79hohtlctrwm81aij&ep=v1_gifs_search&rid=giphy.gif&ct=g" alt="Gif" class="img-fluid rounded-start">
+      </div>
+      <!-- Form oszlop -->
+      <div class="col-md-7">
+        <div class="card-body">
+          <h3 class="card-title text-center mb-4 text-primary">Energy Consumption Analysis</h3>
+          <form #form="ngForm" class="row g-3" (ngSubmit)="predict()">
+            <!-- Első oszlop -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="device_option" class="form-label">Select the device:</label>
+                <select name="device_option" ngModel id="device_option" class="form-select" required>
+                  <option value="all">All devices</option>
+                  <option value="specific">Select specific devices</option>
+                </select>
+              </div>
 
-      <form #form="ngForm" class="form-grid">
-        <div class="column">
-          <label for="device_option">Select the device:</label> 
-          <select name="device_option" ngModel> 
-            <option value="all">All devices</option> 
-            <option value="specific">Select specific devices</option>
-          </select>
-          
-          <div *ngIf="form.value.device_option === 'specific'">
-            <table>
-              <tr>
-                <td>
-                  <input type="radio" (change)="onDeviceSelectionChange($event, 'hair_dryer')" id="hair_dryer" name="specific_device" class="custom-radio">
-                  <label for="hair_dryer">Hair Dryer</label>
-                </td>
-                <td>
-                  <input type="radio" (change)="onDeviceSelectionChange($event, 'printer')" id="printer" name="specific_device" class="custom-radio">
-                  <label for="printer">Printer</label>
-                </td>
-                <td>
-                  <input type="radio" (change)="onDeviceSelectionChange($event, 'washing_machine')" id="washing_machine" name="specific_device" class="custom-radio">
-                  <label for="washing_machine">Washing Machine</label>
-                </td>
-                <td>
-                  <input type="radio" (change)="onDeviceSelectionChange($event, 'hoover')" id="hoover" name="specific_device" class="custom-radio">
-                  <label for="hoover">Hoover</label>
-                </td>
-              </tr>
-            </table>
-          </div>
-          
-          <label for="time_interval">Select the time interval:</label>
-          <select name="time_interval" ngModel>
-            <option value="daily">Daily</option>
-            <option value="hourly">Hourly</option>
-            <option value="5_hourly">Every 5 Hours</option>
-          </select>
-          
-          <label for="prediction_model">Select the prediction model:</label>
-          <select name="prediction_model" ngModel>
-            <option value="LSTM">Built-in LSTM</option>
-            <option value="custom">Upload Custom Model</option>
-          </select>
-          
-          <input type="file" (change)="onFileSelected($event)" accept=".h5, .hdf5" *ngIf="form.value.prediction_model === 'custom'">
+              <div class="mb-3" *ngIf="form.value.device_option === 'specific'">
+                <label class="form-label">Select Specific Device:</label>
+                <div class="d-flex flex-wrap">
+                  <div class="form-check me-3">
+                    <input type="radio" 
+                           id="hair_dryer" 
+                           name="specific_device" 
+                           class="form-check-input" 
+                           [(ngModel)]="selectedDevice" 
+                           value="hair_dryer" 
+                           required>
+                    <label for="hair_dryer" class="form-check-label">Hair Dryer</label>
+                  </div>
+                  <div class="form-check me-3">
+                    <input type="radio" 
+                           id="printer" 
+                           name="specific_device" 
+                           class="form-check-input" 
+                           [(ngModel)]="selectedDevice" 
+                           value="printer" 
+                           required>
+                    <label for="printer" class="form-check-label">Printer</label>
+                  </div>
+                  <div class="form-check me-3">
+                    <input type="radio" 
+                           id="washing_machine" 
+                           name="specific_device" 
+                           class="form-check-input" 
+                           [(ngModel)]="selectedDevice" 
+                           value="washing_machine" 
+                           required>
+                    <label for="washing_machine" class="form-check-label">Washing Machine</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" 
+                           id="hoover" 
+                           name="specific_device" 
+                           class="form-check-input" 
+                           [(ngModel)]="selectedDevice" 
+                           value="hoover" 
+                           required>
+                    <label for="hoover" class="form-check-label">Hoover</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="time_interval" class="form-label">Select the time interval:</label>
+                <select name="time_interval" ngModel id="time_interval" class="form-select" required>
+                  <option value="daily">Daily</option>
+                  <option value="hourly">Hourly</option>
+                  <option value="5_hourly">Every 5 Hours</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="prediction_model" class="form-label">Select the prediction model:</label>
+                <select name="prediction_model" ngModel id="prediction_model" class="form-select" required>
+                  <option value="LSTM">Built-in LSTM</option>
+                  <option value="custom">Upload Custom Model</option>
+                </select>
+              </div>
+
+              <div class="mb-3" *ngIf="form.value.prediction_model === 'custom'">
+                <label for="custom_model" class="form-label">Upload Custom Model:</label>
+                <input type="file" 
+                       (change)="onFileSelected($event)" 
+                       accept=".h5, .hdf5" 
+                       name="custom_model" 
+                       id="custom_model" 
+                       class="form-control" 
+                       required>
+              </div>
+            </div>
+
+            <!-- Második oszlop -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="V_rms" class="form-label">Effective voltage (V_rms):</label>
+                <input [(ngModel)]="formData.v_rms" 
+                       name="v_rms" 
+                       id="V_rms" 
+                       placeholder="V_rms" 
+                       type="number" 
+                       class="form-control" 
+                       required>
+              </div>
+
+              <div class="mb-3">
+                <label for="I_rms" class="form-label">Effective current (I_rms):</label>
+                <input [(ngModel)]="formData.i_rms" 
+                       name="i_rms" 
+                       id="I_rms" 
+                       placeholder="I_rms" 
+                       type="number" 
+                       class="form-control" 
+                       required>
+              </div>
+
+              <div class="mb-3">
+                <label for="S" class="form-label">Active Power (S):</label>
+                <input [(ngModel)]="formData.s" 
+                       name="s" 
+                       id="S" 
+                       placeholder="S" 
+                       type="number" 
+                       class="form-control" 
+                       required>
+              </div>
+            </div>
+
+            <!-- Dátum oszlop -->
+            <div class="col-12">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="start_date" class="form-label">Start Date:</label>
+                  <input type="date" 
+                         name="start_date" 
+                         ngModel 
+                         id="start_date" 
+                         class="form-control" 
+                         required>
+                </div>
+                <div class="col-md-6">
+                  <label for="end_date" class="form-label">End Date:</label>
+                  <input type="date" 
+                         name="end_date" 
+                         ngModel 
+                         id="end_date" 
+                         class="form-control" 
+                         required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gomb oszlop -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary">Start Analysis</button>
+            </div>
+
+           
+          </form>
         </div>
-        
-        <div class="column">
-          <label for="V_rms">Effektív feszültség (V_rms):</label>
-          <input [(ngModel)]="formData.v_rms" name="v_rms" placeholder="V_rms" type="number">
-
-          <label for="I_rms">Effektív áram (I_rms):</label>
-          <input [(ngModel)]="formData.i_rms" name="i_rms" placeholder="I_rms" type="number">
-
-          <label for="S">Active Power (S):</label>
-          <input [(ngModel)]="formData.s" name="s" placeholder="S" type="number">
-        </div>
-
-        <div class="column date-column">
-          <label for="start_date">Start Date:</label>
-          <input type="date" name="start_date" ngModel required>
-
-          <label for="end_date">End Date:</label>
-          <input type="date" name="end_date" ngModel required>
-        </div>
-        
-        <div class="button-container">
-          <button (click)="predict()" type="submit">Start Analysis</button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
 </div>

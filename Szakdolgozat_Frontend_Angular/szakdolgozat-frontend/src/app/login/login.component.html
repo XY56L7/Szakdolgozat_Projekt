@@ -1,28 +1,26 @@
 <div class="content">
   <div class="form-container">
-    <div class="login-container">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="username">Username:</label>
-          <input id="username" formControlName="username" type="text" class="custom-input">
-          <mat-error *ngIf="hasError('username', 'required')" class="error-message">
-            Username is required
-          </mat-error>
+    <div class="form-inner-container">
+      <div class="row">
+        <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
+          <img src="assets/images/login.gif" alt="Register GIF" class="img-fluid">
         </div>
-        
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input id="password" formControlName="password" type="password" class="custom-input" (input)="valid=true">
-          <mat-error *ngIf="hasError('password', 'required')" class="error-message">
-            Password is required
-          </mat-error>
+        <div class="col-md-6">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input id="username" formControlName="username" type="text" class="form-control custom-input">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input id="password" formControlName="password" type="password" class="form-control custom-input">
+            </div>
+
+            <button type="submit" class="submit-button">Log In</button>
+          </form>
         </div>
-        
-        <button type="submit" class="submit-button">Login</button>
-        <mat-error *ngIf="!valid" class="error-message">
-          Wrong username or password
-        </mat-error>
-      </form>
+      </div>
     </div>
   </div>
 </div>
