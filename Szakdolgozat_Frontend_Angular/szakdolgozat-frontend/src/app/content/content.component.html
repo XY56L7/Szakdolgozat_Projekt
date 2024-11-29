@@ -1,103 +1,119 @@
-<!-- Háttér -->
 <div class="background"></div>
 
-<!-- Tartalom -->
 <div class="content">
-        <div class="card shadow-lg" style="max-width: 900px; width: 100%;">
-            <div class="row g-0">
-                <!-- GIF oszlop -->
-                <div class="col-md-5 d-none d-md-flex justify-content-center align-items-center">
-                    <img src="https://media.giphy.com/media/3oz8xJGmKVegkj8r8Q/giphy.gif" alt="Gif" class="img-fluid rounded-start">
-                </div>
-                <!-- Form oszlop -->
-                <div class="col-md-7">
-                    <div class="card-body">
-                        <h3 class="card-title text-center mb-4 text-primary">Energy Consumption Analysis</h3>
-                        <form #form="ngForm" class="row g-3" (ngSubmit)="predict()">
-                            <!-- Első oszlop -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="device_option" class="form-label">Select the device:</label>
-                                    <select name="device_option" ngModel id="device_option" class="form-select" required>
-                                        <option value="all">All devices</option>
-                                        <option value="specific">Select specific devices</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3" *ngIf="form.value.device_option === 'specific'">
-                                    <label class="form-label">Select Specific Device:</label>
-                                    <div class="d-flex flex-wrap">
-                                        <div class="form-check me-3">
-                                            <input type="radio" id="hair_dryer" name="specific_device" class="form-check-input" [(ngModel)]="selectedDevice" value="hair_dryer" required>
-                                            <label for="hair_dryer" class="form-check-label">Hair Dryer</label>
-                                        </div>
-                                        <div class="form-check me-3">
-                                            <input type="radio" id="printer" name="specific_device" class="form-check-input" [(ngModel)]="selectedDevice" value="printer" required>
-                                            <label for="printer" class="form-check-label">Printer</label>
-                                        </div>
-                                        <div class="form-check me-3">
-                                            <input type="radio" id="washing_machine" name="specific_device" class="form-check-input" [(ngModel)]="selectedDevice" value="washing_machine" required>
-                                            <label for="washing_machine" class="form-check-label">Washing Machine</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="radio" id="hoover" name="specific_device" class="form-check-input" [(ngModel)]="selectedDevice" value="hoover" required>
-                                            <label for="hoover" class="form-check-label">Hoover</label>
-                                        </div>
+    <div class="card shadow-lg" style="max-width: 900px; width: 100%;">
+        <div class="row g-0">
+            <div class="col-md-5 d-none d-md-flex justify-content-center align-items-center">
+                <img src="https://media.giphy.com/media/3oz8xJGmKVegkj8r8Q/giphy.gif" alt="Gif" class="img-fluid rounded-start">
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4 text-primary">Energy Consumption Analysis</h3>
+                    <form #form="ngForm" class="row g-3" (ngSubmit)="predict()">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="analysis_type" class="form-label">Select analysis type:</label>
+                                <select name="analysis_type" id="analysis_type" class="form-select" [(ngModel)]="selectedAnalysisType" required>
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option value="device">Consumption of specific device</option>
+                                    <option value="consumption">Consumption of energy community</option>
+                                    <option value="production">Production of energy community</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div *ngIf="selectedAnalysisType === 'device'" class="col-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="specific_device" class="form-label">Select the device:</label>
+                                        <select name="specific_device" id="specific_device" class="form-select" [(ngModel)]="selectedDevice" required>
+                                            <option value="" disabled selected>Select a device</option>
+                                            <option value="hair_dryer">Hair Dryer</option>
+                                            <option value="printer">Printer</option>
+                                            <option value="washing_machine">Washing Machine</option>
+                                            <option value="hoover">Hoover</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="time_interval" class="form-label">Select the time interval:</label>
-                                    <select name="time_interval" ngModel id="time_interval" class="form-select" required>
-                                        <option value="daily">Daily</option>
-                                        <option value="hourly">Hourly</option>
-                                        <option value="5_hourly">Every 5 Hours</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="prediction_model" class="form-label">Select the prediction model:</label>
-                                    <select name="prediction_model" ngModel id="prediction_model" class="form-select" required>
-                                        <option value="LSTM">Built-in LSTM</option>
-                                        <option value="custom">Upload Custom Model</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3" *ngIf="form.value.prediction_model === 'custom'">
-                                    <label for="custom_model" class="form-label">Upload Custom Model:</label>
-                                    <input type="file" (change)="onFileSelected($event)" accept=".h5, .hdf5" name="custom_model" id="custom_model" class="form-control" required>
-                                </div>
-                            </div>
-                            <!-- Második oszlop -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="V_rms" class="form-label">Effective voltage (V_rms):</label>
-                                    <input [(ngModel)]="formData.v_rms" name="v_rms" id="V_rms" placeholder="V_rms" type="number" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="I_rms" class="form-label">Effective current (I_rms):</label>
-                                    <input [(ngModel)]="formData.i_rms" name="i_rms" id="I_rms" placeholder="I_rms" type="number" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="S" class="form-label">Active Power (S):</label>
-                                    <input [(ngModel)]="formData.s" name="s" id="S" placeholder="S" type="number" class="form-control" required>
-                                </div>
-                            </div>
-                            <!-- Dátum és gomb -->
-                            <div class="col-12">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="start_date" class="form-label">Start Date:</label>
-                                        <input type="date" name="start_date" ngModel id="start_date" class="form-control" required>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="V_rms" class="form-label">Effective voltage (V_rms):</label>
+                                        <input [(ngModel)]="formData.v_rms" name="v_rms" id="V_rms" placeholder="V_rms" type="number" class="form-control" required>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="end_date" class="form-label">End Date:</label>
-                                        <input type="date" name="end_date" ngModel id="end_date" class="form-control" required>
+                                    <div class="mb-3">
+                                        <label for="I_rms" class="form-label">Effective current (I_rms):</label>
+                                        <input [(ngModel)]="formData.i_rms" name="i_rms" id="I_rms" placeholder="I_rms" type="number" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="S" class="form-label">Active Power (S):</label>
+                                        <input [(ngModel)]="formData.s" name="s" id="S" placeholder="S" type="number" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary">Start Analysis</button>
+                        </div>
+
+                        <div *ngIf="selectedAnalysisType === 'consumption' || selectedAnalysisType === 'production'" class="col-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="year" class="form-label">Year:</label>
+                                        <input [(ngModel)]="energyCommunityData.year" name="year" id="year" placeholder="Year" type="number" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="month" class="form-label">Month:</label>
+                                        <input [(ngModel)]="energyCommunityData.month" name="month" id="month" placeholder="Month" type="number" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="day" class="form-label">Day:</label>
+                                        <input [(ngModel)]="energyCommunityData.day" name="day" id="day" placeholder="Day" type="number" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="hour" class="form-label">Hour:</label>
+                                        <input [(ngModel)]="energyCommunityData.hour" name="hour" id="hour" placeholder="Hour" type="number" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="number_of_panels" class="form-label">Number of Panels:</label>
+                                        <input [(ngModel)]="energyCommunityData.number_of_panels" name="number_of_panels" id="number_of_panels" placeholder="Number of Panels" type="number" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="season" class="form-label">Season:</label>
+                                        <select [(ngModel)]="energyCommunityData.season" name="season" id="season" class="form-select" required>
+                                            <option value="" disabled selected>Select a season</option>
+                                            <option value="Winter">Winter</option>
+                                            <option value="Spring">Spring</option>
+                                            <option value="Summer">Summer</option>
+                                            <option value="Autumn">Autumn</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Category:</label>
+                                        <input [(ngModel)]="energyCommunityData.category" name="category" id="category" placeholder="Category" type="text" class="form-control" required>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div class="col-12" *ngIf="selectedAnalysisType === 'device'">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="start_date" class="form-label">Start Date:</label>
+                                    <input type="date" name="start_date" ngModel id="start_date" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="end_date" class="form-label">End Date:</label>
+                                    <input type="date" name="end_date" ngModel id="end_date" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary">Start Analysis</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
     </div>
 </div>

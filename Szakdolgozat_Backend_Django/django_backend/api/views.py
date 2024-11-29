@@ -16,7 +16,6 @@ from keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import matplotlib.pyplot as plt
-import json
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -25,46 +24,97 @@ import matplotlib
 from asgiref.sync import sync_to_async
 matplotlib.use('Agg')
 
+
+def encode_season(season):
+    seasons = ["Winter", "Spring", "Summer", "Autumn"]
+    return [1 if s == season else 0 for s in seasons]
+
+def encode_category(category):
+    categories = ["kertes ház", "ikerház", "panel"]
+    return [1 if c == category else 0 for c in categories]
+
+@csrf_exempt
+def predict_energy(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            year = data.get('year')
+            month = data.get('month')
+            day = data.get('day')
+            hour = data.get('hour')
+            number_of_panels = data.get('number_of_panels')
+            season = data.get('season')  
+            category = data.get('category') 
+
+            season_encoded = encode_season(season)
+            category_encoded = encode_category(category)
+
+            features = [
+                year, month, day, hour, number_of_panels, *season_encoded, *category_encoded
+            ]
+
+            print(features)
+
+            production = predict_production(features)
+            consumption = predict_consumption(features)
+
+            return JsonResponse({'production_power': production, 'consumption_power': consumption})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# Termelés predikció
+def predict_production(features):
+    model_path = os.path.join(settings.BASE_DIR, 'api', 'models', 'production_model.keras')
+    scaler_path = os.path.join(settings.BASE_DIR, 'api', 'models', 'scaler.pkl')
+    model = load_model(model_path)
+    scaler = joblib.load(scaler_path)
+
+    # Skálázás és predikció
+    features_scaled = scaler.transform([features])
+
+    prediction = model.predict(features_scaled)
+    return float(prediction[0][0])
+
+def predict_consumption(features):
+    model_path = os.path.join(settings.BASE_DIR, 'api', 'models', 'consumption_model.keras')
+    scaler_path = os.path.join(settings.BASE_DIR, 'api', 'models', 'scaler.pkl')
+    model = load_model(model_path)
+    scaler = joblib.load(scaler_path)
+
+    features_scaled = scaler.transform([features])
+    
+    prediction = model.predict(features_scaled)
+    return float(prediction[0][0])
+
+
 BASE_DIR = settings.BASE_DIR 
 MEDIA_DIR = os.path.join(BASE_DIR, 'api', 'media')
 
-
-# def predict_power_consumption(v_rms, i_rms, s):
-#     input_data = np.array([[v_rms, i_rms, s]])
-#     input_data_scaled = scaler.transform(input_data)
-#     print(f'input_data_scaled',input_data_scaled)
-#     input_data_scaled = np.reshape(input_data_scaled, (1, 1, 3))
-    
-#     prediction = model.predict(input_data_scaled)
-#     predicted_power = float(prediction[0, 2])  # Assuming the model predicts the power at index 2
-
-#     return predicted_power
 def predict_power_consumption(v_rms, i_rms, s,device):
     MODEL_PATH = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}.keras')
-    #SCALER_PATH = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}_scaler.pkl')
+
     INPUT_SCALER = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}_scaler_features.pkl')
     OUTPUT_SCALER = os.path.join(BASE_DIR, 'api', 'models', f'{device}',f'{device}_scaler_target.pkl')
     model = load_model(MODEL_PATH)
-    #scaler = joblib.load(SCALER_PATH)
+
     input_scaler = joblib.load(INPUT_SCALER)
     output_scaler = joblib.load(OUTPUT_SCALER)
-    # Bemeneti adatok DataFrame-ként, mivel a scaler feature nevekkel lett fitelve
+
     input_data = pd.DataFrame([[v_rms, i_rms, s]], columns=['V_rms', 'I_rms', 'S'])
     
-    # Bemeneti adat skálázása
     input_data_scaled = input_scaler.transform(input_data)
     input_data_scaled = np.reshape(input_data_scaled, (1, 1, 3))
 
-    # Előrejelzés
     prediction = model.predict(input_data_scaled)
 
-    # Kimenet ellenőrzése és visszaalakítása
     print(f'Prediction: {prediction}')
     
-    # Ha csak egy kimeneti érték van
-    predicted_power_scaled = prediction[0, 0]  # Index 0, mert egyetlen értéket kapunk
+    predicted_power_scaled = prediction[0, 0]  
 
-    # Kimenet visszaalakítása eredeti skálára
     predicted_power = output_scaler.inverse_transform([[predicted_power_scaled]])[0][0]
 
     return abs(predicted_power)
@@ -75,29 +125,23 @@ def predict_power_consumption(v_rms, i_rms, s,device):
 @require_http_methods(["POST"])
 async def evaluate_model(request):
     try:
-        # Log the raw request body
         print("Raw request body:", request.body)
         
-        # Attempt to parse the JSON data
         data = json.loads(request.body)
         print("Parsed data:", data)
         
-        # Check if required fields are present
         if 'V_rms' not in data or 'I_rms' not in data or 'S' not in data:
             return JsonResponse({'error': 'Missing required input fields'}, status=400)
 
-        # Log extracted values
         v_rms = float(data.get('V_rms'))
         i_rms = float(data.get('I_rms'))
         s = float(data.get('S'))
         device = str(data.get('Device'))
         print(f"Extracted values - V_rms: {v_rms}, I_rms: {i_rms}, S: {s}")
 
-        # Call the prediction function
         predicted_power = await sync_to_async(predict_power_consumption)(v_rms, i_rms, s,device)
         print("Predicted power:", predicted_power)
 
-        # Generate and save the plot
         fig, ax = plt.subplots()
         ax.plot([v_rms, i_rms, s], label='Input Data')
         ax.set_title('Predicted Power Consumption')
@@ -120,7 +164,6 @@ async def evaluate_model(request):
         else:
             print("Image does not exist.")
 
-        # Send the response
         response_data = {
             'image_path': request.build_absolute_uri('/api' + settings.MEDIA_URL + image_filename),
             'predicted_power': predicted_power

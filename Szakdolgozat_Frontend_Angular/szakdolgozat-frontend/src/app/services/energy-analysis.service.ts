@@ -9,9 +9,13 @@ import { PredictionData } from '../models/energy_model';
 })
 export class EnergyAnalysisService {
 
-  private apiUrl = 'http://127.0.0.1:8000/api/users/energy/';  // A szerver URL-je
+  private apiUrl = 'http://127.0.0.1:8000/api/users/energy/';  
 
   constructor(private http: HttpClient) { }
+
+  getConsume(data: any) {
+    return this.http.post<any>('http://127.0.0.1:8000/api/predict_energy/', data);
+  }
 
   getPrediction(object : PredictionData) {
     const body = { V_rms: object.v_rms, I_rms: object.i_rms, S: object.s,Device:object.device};
@@ -24,7 +28,7 @@ export class EnergyAnalysisService {
 
   submitEnergyAnalysis(data: EnergyAnalysis): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data' // Mivel fájl is van az űrlapon
+      'Content-Type': 'multipart/form-data' 
     });
 
     const formData: FormData = new FormData();
