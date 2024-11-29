@@ -32,7 +32,6 @@ def encode_season(season):
 def encode_category(category):
     categories = ["kertes ház", "ikerház", "panel"]
     return [1 if c == category else 0 for c in categories]
-
 @csrf_exempt
 def predict_energy(request):
     if request.method == 'POST':
@@ -53,27 +52,82 @@ def predict_energy(request):
                 year, month, day, hour, number_of_panels, *season_encoded, *category_encoded
             ]
 
-            print(features)
-
+            # Előrejelzések
             production = predict_production(features)
             consumption = predict_consumption(features)
 
-            return JsonResponse({'production_power': production, 'consumption_power': consumption})
+            # Plotolás
+            fig, ax = plt.subplots(figsize=(10, 5))
+            ax.plot(['Production', 'Consumption'], [production, consumption], marker='o', label='Predictions')
+            ax.set_title('Energy Predictions')
+            ax.set_ylabel('Power (kW)')
+            ax.set_xlabel('Category')
+            ax.legend()
+            ax.grid(True)
+
+            # Fájl mentése
+            random_number = random.randint(0, 10000)
+            image_filename = f'energy_predictions_{random_number}.png'
+            image_path = os.path.join(MEDIA_DIR, image_filename)
+            plt.savefig(image_path)
+            plt.close(fig)
+
+            # Ellenőrzés
+            if os.path.exists(image_path):
+                print(f"Image saved at {image_path}")
+            else:
+                print("Image not found")
+
+            return JsonResponse({
+                'production_power': production,
+                'consumption_power': consumption,
+                'plot_url': request.build_absolute_uri('/api' + settings.MEDIA_URL + image_filename)
+            })
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+# @csrf_exempt
+# def predict_energy(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             year = data.get('year')
+#             month = data.get('month')
+#             day = data.get('day')
+#             hour = data.get('hour')
+#             number_of_panels = data.get('number_of_panels')
+#             season = data.get('season')  
+#             category = data.get('category') 
 
-# Termelés predikció
+#             season_encoded = encode_season(season)
+#             category_encoded = encode_category(category)
+
+#             features = [
+#                 year, month, day, hour, number_of_panels, *season_encoded, *category_encoded
+#             ]
+
+#             print(features)
+
+#             production = predict_production(features)
+#             consumption = predict_consumption(features)
+
+#             return JsonResponse({'production_power': production, 'consumption_power': consumption})
+
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+
+#     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
 def predict_production(features):
     model_path = os.path.join(settings.BASE_DIR, 'api', 'models', 'production_model.keras')
     scaler_path = os.path.join(settings.BASE_DIR, 'api', 'models', 'scaler.pkl')
     model = load_model(model_path)
     scaler = joblib.load(scaler_path)
 
-    # Skálázás és predikció
     features_scaled = scaler.transform([features])
 
     prediction = model.predict(features_scaled)
@@ -180,7 +234,7 @@ async def evaluate_model(request):
 
 @api_view(['GET'])
 def get_users(request):
-    users = User.objects.all()  # Get all users
+    users = User.objects.all() 
     serializer = UserSerializer(users, many=True) 
     return Response(serializer.data, status=status.HTTP_200_OK)
 

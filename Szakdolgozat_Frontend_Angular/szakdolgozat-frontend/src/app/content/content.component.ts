@@ -65,10 +65,14 @@ export class ContentComponent {
       };
 
       this.energyAnalysisService.getConsume(data).subscribe(resp => {
+        console.log(resp)
         this.predictedP = resp.consumption_power;
-
+        if (resp.plot_url) {
+          this.plotUrl = resp.plot_url;
+          console.log('Image URL:', this.plotUrl);
+        }
         this.router.navigate(['/evaluate'], {
-          state: { predictedP: this.predictedP }
+          state: { predictedP: this.predictedP, plotUrl: this.plotUrl }
         });
       });
     }else if (this.selectedAnalysisType === 'production') {
@@ -84,9 +88,13 @@ export class ContentComponent {
 
       this.energyAnalysisService.getConsume(data).subscribe(resp => {
         this.predictedP = resp.production_power;
+        if (resp.image_path) {
+          this.plotUrl = resp.image_path;
+          console.log('Image URL:', this.plotUrl);
+        }
 
         this.router.navigate(['/evaluate'], {
-          state: { predictedP: this.predictedP }
+          state: { predictedP: this.predictedP, plotUrl: this.plotUrl }
         });
       });
     }
