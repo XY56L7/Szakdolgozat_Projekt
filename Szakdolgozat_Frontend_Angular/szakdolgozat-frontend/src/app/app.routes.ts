@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { MonitoringComponent } from './monitoring/monitoring.component';
 import { EvaluateComponent } from './evaluate/evaluate.component';
 import { IntroductionComponent } from './introduction/introduction.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export const routes: Routes = [
   { path: 'home', component: IntroductionComponent },
@@ -15,7 +16,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'monitoring', component: MonitoringComponent },
   { path: 'evaluate', component: EvaluateComponent },
-  { path: 'platform', component: ContentComponent }, // Renaming 'home' to 'platform' for clarity
+  { path: 'platform', component: ContentComponent },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
