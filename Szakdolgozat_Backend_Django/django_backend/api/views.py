@@ -2,7 +2,8 @@ import os
 from django.conf import settings
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializer import EnergyAnalysisSerializer, RegisterSerializer, UserSerializer
 from django.contrib.auth.models import User
@@ -73,6 +74,11 @@ async def evaluate_model(request):
         return JsonResponse({'error': f'Invalid input data: {str(e)}'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def protected(request):
+    return Response({'message': 'Ez egy védett endpoint!'})
 
 @api_view(['POST'])
 def register(request):

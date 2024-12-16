@@ -1,0 +1,18 @@
+<div class="content">
+    <div class="form-container">
+        <div class="form-inner-container">
+            <form [formGroup]="settingForm">
+                <label><input type="radio" id="manual" 
+                        formControlName="setting" value="0" 
+                        (change)="onSettingChange('0')" [checked]="selectedSetting === '0'"> 
+                    Manual
+                </label>
+                <label><input type="radio" id="automata" 
+                        formControlName="setting" value="1" 
+                        (change)="onSettingChange('1')" [checked]="selectedSetting === '1'"> 
+                        Automata
+                </label>
+            </form>
+        </div>
+    </div>
+</div>

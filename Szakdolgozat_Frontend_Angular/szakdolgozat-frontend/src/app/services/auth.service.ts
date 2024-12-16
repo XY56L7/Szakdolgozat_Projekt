@@ -29,7 +29,6 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('access', response.access);
         localStorage.setItem('refresh', response.refresh);
-        console.log("Line 41 auth service ts")
         this.authSubject.next(response);
         this.authUserNameSubject.next(response);
       })

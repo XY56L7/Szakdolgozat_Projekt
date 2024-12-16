@@ -7,6 +7,10 @@ import { AuthInterceptor } from './services/auth.interceptos';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient(withFetch()), provideRouter(routes),    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, provideAnimationsAsync()
+  providers: [
+    provideHttpClient(withFetch()), 
+    provideRouter(routes),    
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, 
+    provideAnimationsAsync()
   ]  // withFetch() hozzáadása
 };
