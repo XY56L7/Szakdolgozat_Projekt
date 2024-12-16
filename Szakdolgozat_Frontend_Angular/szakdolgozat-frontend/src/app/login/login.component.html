@@ -9,7 +9,7 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
               <label for="username">Username:</label>
-              <input id="username" formControlName="username" type="text" class="form-control custom-input">
+              <input id="username" formControlName="username" type="text" class="form-control custom-input" placeholder="username">
               <mat-error *ngIf="hasError('username', 'required')" class="error-message">
                 Username is required
               </mat-error>
@@ -17,7 +17,10 @@
 
             <div class="form-group">
               <label for="password">Password:</label>
-              <input id="password" formControlName="password" type="password" class="form-control custom-input">
+              <div class="show custom-input">
+                <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="password">
+                <img [src]="imgUrl" (click)="change()">
+              </div>
               <mat-error *ngIf="hasError('password', 'required')" class="error-message">
                 Password is required
               </mat-error>

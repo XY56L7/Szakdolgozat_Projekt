@@ -9,7 +9,7 @@
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
               <label for="username">Username:</label>
-              <input id="username" formControlName="username" type="text" class="form-control custom-input">
+              <input id="username" formControlName="username" type="text" class="form-control custom-input" placeholder="username">
               <mat-error *ngIf="hasError('username', 'required')" class="error-message">
                 Username is mandatory
               </mat-error>
@@ -17,7 +17,7 @@
 
             <div class="form-group">
               <label for="email">Email:</label>
-              <input id="email" formControlName="email" type="email" class="form-control custom-input">
+              <input id="email" formControlName="email" type="email" class="form-control custom-input" placeholder="your.email@gmail.com">
               <mat-error *ngIf="hasError('email', 'required')" class="error-message">
                 Email is mandatory
               </mat-error>
@@ -28,16 +28,36 @@
 
             <div class="form-group">
               <label for="password">Password:</label>
-              <input id="password" formControlName="password" type="password" class="form-control custom-input">
+              <div class="show custom-input">
+                <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="password">
+                <img [src]="imgUrl" (click)="change()">
+              </div>
               <mat-error *ngIf="hasError('password', 'required')" class="error-message">
                 Password is mandatory
               </mat-error>
               <mat-error *ngIf="hasError('password', 'minlength')" class="error-message">
-                The length of the password must be at least {{ registerForm.get('password')?.errors?.['minlength']?.requiredLength }} long.
+                The length of the password must be at least {{ registerForm.get('password')?.errors?.['minlength']?.requiredLength }} long
               </mat-error>
             </div>
 
-            <button type="submit" class="submit-button">Registration</button>
+            <div class="form-group">
+              <label for="pasc_passwordsword">Confirm password:</label>
+              <div class="show custom-input">
+                <input id="c_password" formControlName="c_password" [type]="showPassword ? 'text' : 'password'" placeholder="repeat your password">
+                <img [src]="imgUrl" (click)="change()">
+              </div>
+              <mat-error *ngIf="hasError('c_password', 'required')" class="error-message">
+                Password is mandatory
+              </mat-error>
+              <mat-error *ngIf="hasError('c_password', 'minlength')" class="error-message">
+                The length of the password must be at least {{ registerForm.get('c_password')?.errors?.['minlength']?.requiredLength }} long
+              </mat-error>
+              <mat-error *ngIf="registerForm?.errors?.['mismatch'] && registerForm?.touched" class="error-message">
+                Passwords do not match
+              </mat-error>
+            </div>
+
+            <button  type="submit" class="submit-button">Registration</button>
           </form>
         </div>
       </div>

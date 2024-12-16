@@ -19,9 +19,6 @@
   }
 }
 
-.form-container {
-}
-
 .form-inner-container {
   max-width: 500px;
   width: 100%;
@@ -34,6 +31,26 @@
 
 .form-group {
   margin-bottom: 20px;
+}
+
+.form-container {
+}
+
+.show {
+  display: flex;
+  align-items: center;
+}
+
+.show input {
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  outline: 0;
+}
+
+.show img {
+  width: 35px;
+  cursor: pointer;
 }
 
 label {
@@ -81,4 +98,20 @@ label {
 
 .submit-button:hover {
   background-color: #049e9a; 
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-text {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0 10px;
+}
+
+.input-group-text i {
+  font-size: 16px;
 }
