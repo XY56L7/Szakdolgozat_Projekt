@@ -19,6 +19,8 @@ export class RegisterComponent {
   submitted = false;
   imgUrl: string;
   showPassword: boolean;
+  errorOccurredAfterSubmit = false;
+  errorSubmitMsg: string | null = null;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
@@ -51,12 +53,22 @@ export class RegisterComponent {
 
   onSubmit() {
     this.submitted = true;
+
     if (this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe(response => {
-        this.router.navigate(['/login'], {
-         
-        });
+      this.authService.register(this.registerForm.value).subscribe({
+        next: () => {
+          this.errorOccurredAfterSubmit = false;
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          this.errorOccurredAfterSubmit = true;
+          this.errorSubmitMsg = err;
+        }
       });
+    }
+    else {
+      this.errorOccurredAfterSubmit = true;
+      this.errorSubmitMsg = "Hiba lépett fel!";
     }
   }
 

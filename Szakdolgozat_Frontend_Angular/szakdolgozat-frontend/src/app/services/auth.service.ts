@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 interface TokenResponse {
@@ -21,7 +21,17 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   register(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}register/`, user);
+    return this.http.post(`${this.apiUrl}register/`, user).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMsg = 'Valami hiba történt.';
+
+        if (error?.error?.username) {
+          errorMsg = error.error.username[0];
+        }
+
+        return throwError(() => errorMsg);
+      })
+    );
   }
 
   login(credentials: any): Observable<TokenResponse> {

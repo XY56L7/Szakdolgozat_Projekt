@@ -58,6 +58,9 @@
             </div>
 
             <button  type="submit" class="submit-button">Registration</button>
+            <mat-error *ngIf="errorOccurredAfterSubmit" class="error-message">
+              {{ errorSubmitMsg }}
+            </mat-error>
           </form>
         </div>
       </div>
