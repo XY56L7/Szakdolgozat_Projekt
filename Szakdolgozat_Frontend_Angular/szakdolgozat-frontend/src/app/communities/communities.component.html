@@ -1,0 +1,113 @@
+<div class="background"></div>
+
+<div class="content">
+    <div class="card shadow-lg" style="max-width: 900px; width: 100%;">
+        <div class="row g-0">
+            <div>
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4 text-primary">Communities Analysis</h3>
+                    <form #form="ngForm" class="row g-3" (ngSubmit)="predict()">
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="timestamp" class="form-label">Timestamp:</label>
+                                <input ngModel name="timestamp" id="timestamp" type="datetime-local" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="number_of_panels" class="form-label">Number of panels:</label>
+                                <input [(ngModel)]="formData.number_of_panels" name="number_of_panels" id="number_of_panels" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="panel_area_m2" class="form-label">Panel area m<sup>2</sup>:</label>
+                                <input [(ngModel)]="formData.panel_area_m2" name="panel_area_m2" id="panel_area_m2" type="number" step="0.001" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Category:</label>
+                                <select [(ngModel)]="formData.category" name="category" id="category" class="form-select" required>
+                                    <option *ngFor="let option of c_options" [value]="option">{{ option }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="consumption" class="form-label">Consumption:</label>
+                                <input [(ngModel)]="formData.consumption" name="consumption" id="consumption" type="number" step="0.0000001" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="air_temp" class="form-label">Air temperature:</label>
+                                <input [(ngModel)]="formData.air_temp" name="air_temp" id="air_temp" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="clearsky_dhi" class="form-label">Clear sky DHI(Direct Horizontal Irradiance):</label>
+                                <input [(ngModel)]="formData.clearsky_dhi" name="clearsky_dhi" id="clearsky_dhi" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="clearsky_dni" class="form-label">Clear sky DNI(Direct Normal Irradiance):</label>
+                                <input [(ngModel)]="formData.clearsky_dni" name="clearsky_dni" id="clearsky_dni" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="clearsky_ghi" class="form-label">Clear sky GHI(Global Horizontal Irradiance):</label>
+                                <input [(ngModel)]="formData.clearsky_ghi" name="clearsky_ghi" id="clearsky_ghi" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="clearsky_gti" class="form-label">Clear sky GTI(Global Tilted Irradiance):</label>
+                                <input [(ngModel)]="formData.clearsky_gti" name="clearsky_gti" id="clearsky_gti" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="dhi" class="form-label">DHI:</label>
+                                <input [(ngModel)]="formData.dhi" name="dhi" id="dhi" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dni" class="form-label">DNI:</label>
+                                <input [(ngModel)]="formData.dni" name="dni" id="dni" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="ghi" class="form-label">GHI:</label>
+                                <input [(ngModel)]="formData.ghi" name="ghi" id="ghi" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gti" class="form-label">GTI:</label>
+                                <input [(ngModel)]="formData.gti" name="gti" id="gti" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="cloud_opacity" class="form-label">Cloud opacity:</label>
+                                <input [(ngModel)]="formData.cloud_opacity" name="cloud_opacity" id="cloud_opacity" type="number" step="0.001" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="season" class="form-label">Season:</label>
+                                <select [(ngModel)]="formData.season" name="season" id="season" class="form-select" required>
+                                    <option *ngFor="let option of s_options" [value]="option">{{ option }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-md-6">
+                                <label for="snow_soiling_ground" class="form-label">Snow soiling ground:</label>
+                                <input [(ngModel)]="formData.snow_soiling_ground" name="snow_soiling_ground" id="snow_soiling_ground" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="snow_soiling_rooftop" class="form-label">Snow soiling rooftop:</label>
+                                <input [(ngModel)]="formData.snow_soiling_rooftop" name="snow_soiling_rooftop" id="snow_soiling_rooftop" type="number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary">Start Analysis</button>
+                        </div>
+                    </form>
+                    <p>Predicted Production for next 15 minutes: {{ predictedP }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

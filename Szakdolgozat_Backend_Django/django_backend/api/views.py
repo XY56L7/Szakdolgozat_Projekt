@@ -22,11 +22,68 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import random
 import matplotlib
+import pickle
 from asgiref.sync import sync_to_async
 matplotlib.use('Agg')
 
 BASE_DIR = settings.BASE_DIR 
 MEDIA_DIR = os.path.join(BASE_DIR, 'api', 'media')
+
+@csrf_exempt
+@require_http_methods(['POST'])
+async def predict_communities(request):
+    try:
+        data = json.loads(request.body)
+        print("Parsed data:", data)
+
+        if ('Timestamp' not in data or 'Number_of_panels' not in data or 'Panel_area_m2' not in data or 'Category' not in data or
+             'Consumption' not in data or 'Air_temp' not in data or 'Clearsky_dhi' not in data or 'Clearsky_dni' not in data or
+             'Clearsky_ghi' not in data or 'Clearsky_gti' not in data or 'Cloud_opacity' not in data or 'Dhi' not in data or
+             'Dni' not in data or 'Ghi' not in data or 'Gti' not in data or 'Snow_soiling_rooftop' not in data or 
+             'Snow_soiling_ground' not in data or 'Season' not in data):
+            return JsonResponse({'error': 'Missing required input fields'}, status=400)
+
+        timestamp = pd.to_datetime(data.get('Timestamp'))
+        number_of_panels = int(data.get('Number_of_panels'))
+        panel_area_m2 = float(data.get('Panel_area_m2'))
+        category = str(data.get('Category'))
+        consumption = float(data.get('Consumption'))
+        air_temp = int(data.get('Air_temp'))
+        clearsky_dhi = int(data.get('Clearsky_dhi'))
+        clearsky_dni = int(data.get('Clearsky_dni'))
+        clearsky_ghi = int(data.get('Clearsky_ghi'))
+        clearsky_gti = int(data.get('Clearsky_gti'))
+        cloud_opacity = float(data.get('Cloud_opacity'))
+        dhi = int(data.get('Dhi'))
+        ghi = int(data.get('Ghi'))
+        dni = int(data.get('Dni'))
+        gti = int(data.get('Gti'))
+        snow_soiling_rooftop = int(data.get('Snow_soiling_rooftop'))
+        snow_soiling_ground = int(data.get('Snow_soiling_ground'))
+        season = str(data.get('Season'))
+
+        predicted = await sync_to_async(predict_form)(timestamp, number_of_panels, panel_area_m2, category, consumption, air_temp,
+                                                                       clearsky_dhi, clearsky_dni, clearsky_ghi, clearsky_gti, cloud_opacity, dhi, dni,
+                                                                       ghi, gti, snow_soiling_rooftop, snow_soiling_ground, season)
+        
+        MODEL_PATH = os.path.join(BASE_DIR, 'api', 'models', 'reg.sav')
+        loaded_model = pickle.load(open(MODEL_PATH, "rb"))
+
+        input_data_as_numpy_array = np.asarray(predicted)
+        predicted_production = loaded_model.predict(input_data_as_numpy_array)
+
+        response_data = {
+            'predicted_production': float(predicted_production[0])
+        }
+
+        return JsonResponse(response_data)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except ValueError as e:
+        return JsonResponse({'error': f'Invalid input data: {str(e)}'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -207,3 +264,46 @@ def encode_season(season):
 def encode_category(category):
     categories = ["kertes ház", "ikerház", "panel"]
     return [1 if c == category else 0 for c in categories]
+
+def predict_form(timestamp, number_of_panels, panel_area_m2, category, consumption, air_temp,
+                       clearsky_dhi, clearsky_dni, clearsky_ghi, clearsky_gti, cloud_opacity, dhi,
+                       dni, ghi, gti, snow_soiling_rooftop, snow_soiling_ground, season):
+    input_features = [
+        cloud_opacity, ghi, gti, dhi, timestamp, category, clearsky_dhi, clearsky_dni, clearsky_ghi, clearsky_gti, number_of_panels, panel_area_m2, consumption,
+        air_temp, dni, snow_soiling_rooftop, snow_soiling_ground, season
+    ]
+    columns = [
+        'cloud_opacity', 'ghi', 'gti', 'dhi', 'timestamp', 'category', 'clearsky_dhi', 'clearsky_dni', 'clearsky_ghi', 'clearsky_gti', 'number_of_panels', 'panel_area_m2', 'consumption',
+        'air_temp', 'dni', 'snow_soiling_rooftop', 'snow_soiling_ground', 'season'
+    ]
+    df = pd.DataFrame([input_features], columns=columns, dtype=object)
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    #df.sort_values('timestamp', inplace=True)
+    df = add_time_features(df)
+    df['ts_orig'] = df['timestamp']
+
+    CATEGORY_SCALER = os.path.join(BASE_DIR, 'api', 'models', 'scaler_category.pkl')
+    SEASON_SCALER = os.path.join(BASE_DIR, 'api', 'models', 'scaler_season.pkl')
+
+    category_scaler = pickle.load(open(CATEGORY_SCALER, "rb"))
+    season_scaler = pickle.load(open(SEASON_SCALER, "rb"))
+
+    df['category'] = category_scaler.transform(df[['category']])
+    df['season'] = season_scaler.transform(df[['season']])
+
+    columns = [
+        'cloud_opacity', 'ghi', 'gti', 'dhi', 'month', 'category', 'clearsky_dhi', 'year', 'clearsky_dni', 'snow_soiling_ground', 'month_sin', 
+        'dni', 'panel_area_m2', 'snow_soiling_rooftop', 'day', 'season', 'consumption', 'clearsky_gti', 'clearsky_ghi', 'month_cos', 'air_temp', 
+        'number_of_panels'
+    ]
+    input = df.loc[[df.index[0]], columns]
+    print(input)
+    return input
+
+def add_time_features(df):
+    df['year']  = df['timestamp'].dt.year
+    df['month'] = df['timestamp'].dt.month
+    df['day']   = df['timestamp'].dt.day
+    df['month_sin'] = np.sin(2 * np.pi * df['month'] / 12)
+    df['month_cos'] = np.cos(2 * np.pi * df['month'] / 12)
+    return df

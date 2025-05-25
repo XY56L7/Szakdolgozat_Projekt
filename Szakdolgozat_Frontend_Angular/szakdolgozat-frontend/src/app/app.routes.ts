@@ -11,6 +11,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { authGuard } from './auth.guard';
 import { ProtectedComponent } from './protected/protected.component';
 import { MerchantSettingsComponent } from './merchant-settings/merchant-settings.component';
+import { CommunitiesComponent } from './communities/communities.component';
 
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'evaluate', component: EvaluateComponent },
   { path: 'platform', component: ContentComponent },
   { path: 'merchantSetting', component: MerchantSettingsComponent },
+  { path: 'communities', component: CommunitiesComponent},
   { path: 'protected', component: ProtectedComponent, canActivate: [authGuard] },
   { path: '**', component: NotFoundComponent }
 ];

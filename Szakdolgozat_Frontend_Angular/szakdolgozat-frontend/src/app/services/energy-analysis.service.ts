@@ -18,7 +18,7 @@ export class EnergyAnalysisService {
   }
 
   getPrediction(object : PredictionData) {
-    const body = { V_rms: object.v_rms, I_rms: object.i_rms, S: object.s,Device:object.device};
+    const body = { V_rms: object.v_rms, I_rms: object.i_rms, S: object.s, Device: object.device};
     return this.http.post<any>('http://127.0.0.1:8000/api/predict/', body);
   }
 
