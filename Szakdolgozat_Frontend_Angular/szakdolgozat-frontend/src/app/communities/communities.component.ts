@@ -29,11 +29,15 @@ export class CommunitiesComponent {
 
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
-      this,this.selectedFile = event.target.files[0];
+      this.selectedFile = event.target.files[0];
     }
   }
 
-  predict(){
+  selectModel(){
+    this.predictedP = undefined;
+  }
+
+  async predict(){
     if (this.selectedModel == "Reg") {
       const newCommunitiesData: CommunitiesData = {
         timestamp: this.formData.timestamp,
@@ -58,10 +62,14 @@ export class CommunitiesComponent {
 
       this.communitiesService.getPrediction(newCommunitiesData).subscribe(response => {
         this.predictedP = response.predicted_production;
-      })
+      });
     }
     else if (this.selectedModel == "GRU") {
+      const body = await this.communitiesService.getBody(this.selectedFile);
 
+      this.communitiesService.getPredictionForGRU(body).subscribe(response => {
+        this.predictedP = response.predicted_production;
+      });
     }
   }
 }

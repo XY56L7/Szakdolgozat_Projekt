@@ -23,11 +23,71 @@ from django.views.decorators.http import require_http_methods
 import random
 import matplotlib
 import pickle
+import torch
 from asgiref.sync import sync_to_async
 matplotlib.use('Agg')
 
 BASE_DIR = settings.BASE_DIR 
 MEDIA_DIR = os.path.join(BASE_DIR, 'api', 'media')
+
+@csrf_exempt
+@require_http_methods(['POST'])
+async def predict_communities_gru(request):
+    try:
+        data = json.loads(request.body)
+        print("Parsed data:", data)
+
+        required_columns = [
+            'number_of_panels', 'panel_area_m2', 'category', 'air_temp', 
+            'clearsky_dhi', 'clearsky_dni', 'clearsky_ghi', 'clearsky_gti', 
+            'cloud_opacity', 'dhi', 'dni', 'ghi', 'gti', 
+            'snow_soiling_rooftop', 'snow_soiling_ground', 'season'
+        ]
+
+        df = pd.DataFrame(data)
+
+        missing_cols = [col for col in required_columns if col not in df.columns]
+
+        if (missing_cols):
+            return JsonResponse({'error': 'Missing required input fields'}, status=400)
+        
+        df['number_of_panels'] = df['number_of_panels'].astype(int)
+        df['panel_area_m2'] = df['panel_area_m2'].astype(float)
+        df['category'] = df['category'].astype(str)
+        df['air_temp'] = df['air_temp'].astype(float)
+        df['clearsky_dhi'] = df['clearsky_dhi'].astype(float)
+        df['clearsky_dni'] = df['clearsky_dni'].astype(float)
+        df['clearsky_ghi'] = df['clearsky_ghi'].astype(float)
+        df['clearsky_gti'] = df['clearsky_gti'].astype(float)
+        df['cloud_opacity'] = df['cloud_opacity'].astype(float)
+        df['dhi'] = df['dhi'].astype(float)
+        df['ghi'] = df['ghi'].astype(float)
+        df['dni'] = df['dni'].astype(float)
+        df['gti'] = df['gti'].astype(float)
+        df['snow_soiling_rooftop'] = df['snow_soiling_rooftop'].astype(float)
+        df['snow_soiling_ground'] = df['snow_soiling_ground'].astype(float)
+        df['season'] = df['season'].astype(str)
+
+        predicted = await sync_to_async(predict_form_gru)(df)
+
+        MODEL_PATH = os.path.join(BASE_DIR, 'api', 'models', 'best_solar_model.pth')
+        loaded_model = torch.load(MODEL_PATH, map_location='cpu')
+
+        input_data_as_numpy_array = np.asarray(predicted)
+        predicted_production = loaded_model.predict(input_data_as_numpy_array)
+
+        response_data = {
+            'predicted_production': float(predicted_production[0])
+        }
+
+        return JsonResponse(response_data)
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+    except ValueError as e:
+        return JsonResponse({'error': f'Invalid input data: {str(e)}'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 @csrf_exempt
 @require_http_methods(['POST'])
@@ -48,18 +108,18 @@ async def predict_communities(request):
         panel_area_m2 = float(data.get('Panel_area_m2'))
         category = str(data.get('Category'))
         consumption = float(data.get('Consumption'))
-        air_temp = int(data.get('Air_temp'))
-        clearsky_dhi = int(data.get('Clearsky_dhi'))
-        clearsky_dni = int(data.get('Clearsky_dni'))
-        clearsky_ghi = int(data.get('Clearsky_ghi'))
-        clearsky_gti = int(data.get('Clearsky_gti'))
+        air_temp = float(data.get('Air_temp'))
+        clearsky_dhi = float(data.get('Clearsky_dhi'))
+        clearsky_dni = float(data.get('Clearsky_dni'))
+        clearsky_ghi = float(data.get('Clearsky_ghi'))
+        clearsky_gti = float(data.get('Clearsky_gti'))
         cloud_opacity = float(data.get('Cloud_opacity'))
-        dhi = int(data.get('Dhi'))
-        ghi = int(data.get('Ghi'))
-        dni = int(data.get('Dni'))
-        gti = int(data.get('Gti'))
-        snow_soiling_rooftop = int(data.get('Snow_soiling_rooftop'))
-        snow_soiling_ground = int(data.get('Snow_soiling_ground'))
+        dhi = float(data.get('Dhi'))
+        ghi = float(data.get('Ghi'))
+        dni = float(data.get('Dni'))
+        gti = float(data.get('Gti'))
+        snow_soiling_rooftop = float(data.get('Snow_soiling_rooftop'))
+        snow_soiling_ground = float(data.get('Snow_soiling_ground'))
         season = str(data.get('Season'))
 
         predicted = await sync_to_async(predict_form)(timestamp, number_of_panels, panel_area_m2, category, consumption, air_temp,
@@ -264,6 +324,39 @@ def encode_season(season):
 def encode_category(category):
     categories = ["kertes ház", "ikerház", "panel"]
     return [1 if c == category else 0 for c in categories]
+
+def predict_form_gru(df):
+    FIXED_SEASONS = ['Autumn', 'Spring', 'Summer', 'Winter']
+    FIXED_CATEGORIES = [
+        'apartman', 'családi ház', 'gyár', 'hivatal', 'ikerház', 
+        'irodaház', 'iskola', 'kertes ház', 'kunyhó', 'könyvtár', 
+        'panel lakás', 'sorház', 'tanya'
+    ]
+    NUMERICAL_COLS = [
+        'air_temp', 'cloud_opacity', 'dhi', 'dni', 'ghi', 'gti',
+        'clearsky_dhi', 'clearsky_dni', 'clearsky_ghi', 'clearsky_gti',
+        'snow_soiling_rooftop', 'snow_soiling_ground',
+        'number_of_panels', 'panel_area_m2' 
+    ]
+    FINAL_FEATURE_ORDER = NUMERICAL_COLS + \
+                        [f'season_{s}' for s in FIXED_SEASONS] + \
+                        [f'category_{c}' for c in FIXED_CATEGORIES]
+    
+
+    X_SCALER = os.path.join(BASE_DIR, 'api', 'models', 'scaler_X.save')
+
+    x_scaler = joblib.load(X_SCALER)
+
+    df['season'] = pd.Categorical(df['season'], categories=FIXED_SEASONS)
+    df['category'] = pd.Categorical(df['category'], categories=FIXED_CATEGORIES)
+
+    df = pd.get_dummies(df, columns=['season', 'category'], dummy_na=False, dtype='float32')
+
+    df = df[FINAL_FEATURE_ORDER].values.astype('float32')
+    df = x_scaler.transform(df)
+
+    print(df)
+    return df
 
 def predict_form(timestamp, number_of_panels, panel_area_m2, category, consumption, air_temp,
                        clearsky_dhi, clearsky_dni, clearsky_ghi, clearsky_gti, cloud_opacity, dhi,

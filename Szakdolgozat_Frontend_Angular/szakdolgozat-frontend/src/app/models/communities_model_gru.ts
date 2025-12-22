@@ -1,9 +1,7 @@
-export interface CommunitiesData {
-    timestamp: Date;
+export interface CommunitiesDataGru {
     number_of_panels: number;
     panel_area_m2: number;
     category: string;
-    consumption: number;
     air_temp: number;
     clearsky_dhi: number;
     clearsky_dni: number;
