@@ -9,7 +9,7 @@
                     <form #form="ngForm" class="row g-3" (ngSubmit)="predict()">
                         <div class="mb-3">
                             <label for="model" class="form-label">Select model:</label>
-                             <select name="model" id="model" class="form-select" [(ngModel)]="selectedModel" required>
+                             <select name="model" id="model" class="form-select" [(ngModel)]="selectedModel" required (change)="selectModel()">
                                 <option value="" disabled selected>Select an option</option>
                                 <option value="Reg">XGB Regressor</option>
                                 <option value="GRU">GRU</option>
